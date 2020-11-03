@@ -35,6 +35,34 @@
 #include <util/delay.h>
 
 #define UBBRVAL 51
+#define index 10
+// Temperatures
+uint16_t inroll_temp = 15;
+uint16_t outroll_temp = 20;
+uint16_t avg_temp;
+uint16_t temps[index];
+
+// Lights
+uint16_t outroll_light; //TODO: Add value
+uint16_t inroll_light; //TODO: Add value
+uint16_t lights[index];
+
+
+uint16_t max_roll_distance = 300;
+uint16_t min_roll_distance = 0;
+
+
+//TODO: Add array of temps and getter/filler for the temps
+
+void set_avarage_temp(uint16_t array[index]){
+	int values = 0;
+	int i = 0;
+	
+	for(i=0; i< index; i++){
+		values + array[index];
+	}
+	avg_temp = values;
+}
 
 
 
