@@ -36,6 +36,8 @@
 
 #define UBBRVAL 51
 
+
+
 void uart_init(){
 	// set the baud rate
 	UBRR0H = 0;
@@ -64,8 +66,39 @@ void usart_transmit(uint8_t data){
 	
 	loop_until_bit_is_set(UCSR0A, UDRE0);
 	// send the data
-	UDRE0 data;
+	UDR0 = data;
+}
+
+void adc_init()
+{
+	 // AREF = AVcc
+	 ADMUX = (1<<REFS0);
+	 
+	 // ADC Enable and prescaler of 128
+	 // 16000000/128 = 125000
+	 ADCSRA = (1<<ADEN)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
+	 
+}
+
+// read adc value
+uint16_t adc_read(uint8_t ch)
+{
+	// select the corresponding channel 0~7
+	// ANDing with '7' will always keep the value
+	// of 'ch' between 0 and 7
+	ch &= 0b00000111;  // AND operation with 7
+	ADMUX = (ADMUX & 0xF8)|ch;     // clears the bottom 3 bits before ORing
 	
+	// start single conversion
+	// write '1' to ADSC
+	ADCSRA |= (1<<ADSC);
+	
+	// wait for conversion to complete
+	// ADSC becomes '0' again
+	// till then, run loop continuously
+	while(ADCSRA & (1<<ADSC));
+	
+	return (ADC);
 }
 
 int main (void)
@@ -73,6 +106,26 @@ int main (void)
 	/* Insert system clock initialization code here (sysclk_init()). */
 
 	board_init();
+	uart_init();
+	adc_init();
+	DDRD = 0xff;
+	
+	while (1) {
+		float value = adc_read(0) * 4.68;
+		value /= 1024.0;
+		float temperatureC = (value - 0.5) * 100;
+		if (temperatureC > 16)
+		{
+			PORTD = 0b11100000;
+		}
+		else
+		{
+			PORTD = 0b00100000;
+		}
 
+  }
+	
+	
+	
 	/* Insert application code here, after the board has been initialized. */
 }
