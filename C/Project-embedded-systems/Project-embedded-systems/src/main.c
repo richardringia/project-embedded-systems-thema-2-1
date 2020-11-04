@@ -33,101 +33,18 @@
 #include <stdlib.h>
 #include <avr/sfr_defs.h>
 #include <util/delay.h>
+#include <uart.h>
+#include <adc.h>
+#include <lights.h>
+#include <temperature.h>
 
-#define UBBRVAL 51
-#define index 10
-// Temperatures
-uint16_t inroll_temp = 15;
-uint16_t outroll_temp = 20;
-uint16_t avg_temp;
-uint16_t temps[index];
 
-// Lights
-uint16_t outroll_light; //TODO: Add value
-uint16_t inroll_light; //TODO: Add value
-uint16_t lights[index];
 
 
 uint16_t max_roll_distance = 300;
 uint16_t min_roll_distance = 0;
 
 
-//TODO: Add array of temps and getter/filler for the temps
-
-void set_avarage_temp(uint16_t array[index]){
-	int values = 0;
-	int i = 0;
-	
-	for(i=0; i< index; i++){
-		values + array[index];
-	}
-	avg_temp = values;
-}
-
-
-
-void uart_init(){
-	// set the baud rate
-	UBRR0H = 0;
-	UBRR0L =  UBBRVAL;
-	
-	// disable U2X mode
-	// Remove the prescaler devide by 2 and will increase the speed of the UART to double
-	UCSR0A = 0;
-	
-	// Enable transmitter and reciever
-	UCSR0B = _BV(TXEN0) | (1 << RXEN0);
-	
-	// set frame format : asynchronous, 8 data bits, 1 stop bit, no parity
-	UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
-	
-}
-
-uint8_t usart_read(){
-	loop_until_bit_is_set(UCSR0A, RXC0); // wait until the data exists
-	
-	return UDR0;
-
-}
-
-void usart_transmit(uint8_t data){
-	
-	loop_until_bit_is_set(UCSR0A, UDRE0);
-	// send the data
-	UDR0 = data;
-}
-
-void adc_init()
-{
-	 // AREF = AVcc
-	 ADMUX = (1<<REFS0);
-	 
-	 // ADC Enable and prescaler of 128
-	 // 16000000/128 = 125000
-	 ADCSRA = (1<<ADEN)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
-	 
-}
-
-// read adc value
-uint16_t adc_read(uint8_t ch)
-{
-	// select the corresponding channel 0~7
-	// ANDing with '7' will always keep the value
-	// of 'ch' between 0 and 7
-	ch &= 0b00000111;  // AND operation with 7
-	ADMUX = (ADMUX & 0xF8)|ch;     // clears the bottom 3 bits before ORing
-	
-	// start single conversion
-	// write '1' to ADSC
-	ADCSRA |= (1<<ADSC);
-	
-	// wait for conversion to complete
-	// ADSC becomes '0' again
-	// till then, run loop continuously
-	while(ADCSRA & (1<<ADSC));
-	
-	return (ADC);
-}
 
 int main (void)
 {
@@ -139,10 +56,9 @@ int main (void)
 	DDRD = 0xff;
 	
 	while (1) {
-		float value = adc_read(0) * 4.68;
-		value /= 1024.0;
-		float temperatureC = (value - 0.5) * 100;
-		if (temperatureC > 16)
+		
+		
+		if (get_light() > 100 && get_temp() > 10)
 		{
 			PORTD = 0b11100000;
 		}
@@ -151,7 +67,7 @@ int main (void)
 			PORTD = 0b00100000;
 		}
 
-  }
+	}
 	
 	
 	
