@@ -49,21 +49,30 @@ uint16_t min_roll_distance = 0;
 int main (void)
 {
 	/* Insert system clock initialization code here (sysclk_init()). */
-
+	DDRD = 0xff;
 	board_init();
 	uart_init();
 	_delay_ms(1000);
 	
 	adc_init();
-	DDRD = 0xff;
+
 	
 	while (1) {
-		//_delay_ms(3000);
 		
 		//uint8_t temp = usart_read();
-		usart_transmit(5);
 		
+		uint8_t temp = usart_read();
+		//usart_transmit(temp);
+		//UART_putc("A");
+		UART_putU8(get_light());
+		//UART_puthex8(0x41);
 		
+		if(temp == 0x31) { 
+			PORTD = 0b11100000;
+		}
+		else { 
+			PORTD = 0b00100000;
+		}
 		/*if (get_light() > 100 && get_temp() > 10)
 		{
 			PORTD = 0b11100000;

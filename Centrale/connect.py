@@ -3,6 +3,7 @@
 import serial.tools.list_ports
 import serial
 import sys
+import time
 
 
 
@@ -26,12 +27,23 @@ def get_devices():
 
 for device in get_devices():
     
-    ser = serial.Serial(device, 9600, timeout=1)
+    ser = serial.Serial(device, 19200, timeout=1)
+
+    # var = raw_input("Enter something: ")
+  
+        
+    while True:    
+        ser.write(bytes("1".encode()))
+        
+        read_val = str(ser.readline())
+        print(read_val)
+
+
 
     #print(device)
     
-    while True:
-        #ser.write(bytes("abc".encode()))
-        #read_val = str(ser.readline())
-        #read_val = bytes(ser.readline(), 'utf-8')
-        print(ser.readline())
+    # while True:
+    #     #ser.write(bytes("abc".encode()))
+    #     read_val = str(ser.readline())
+    #     #read_val = bytes(ser.readline(), 'utf-8')
+    #     print(read_val)
