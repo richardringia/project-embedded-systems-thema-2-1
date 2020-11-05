@@ -28,12 +28,9 @@ def get_devices():
 for device in get_devices():
     
     ser = serial.Serial(device, 19200, timeout=1)
-
-    # var = raw_input("Enter something: ")
-  
         
     while True:    
-        ser.write(bytes("1".encode()))
+        ser.write(bytes("2".encode()))
         
         read_val = str(ser.readline())
         print(read_val)
