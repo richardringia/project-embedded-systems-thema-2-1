@@ -22,6 +22,12 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
+#include <asf.h>
+#include <avr/io.h>
+#include <stdlib.h>
+#include <avr/sfr_defs.h>
+#include <util/delay.h>
+
 #define F_CPU 16E6
 #define HIGH 0x1
 #define LOW  0x0
@@ -36,7 +42,6 @@ uint8_t	error;
 const uint8_t data=0;
 const uint8_t clock=1;
 const uint8_t strobe=2;
-
 
 volatile uint16_t gv_counter; // 16 bit counter value
 volatile uint8_t gv_echo; // a flag
@@ -221,7 +226,7 @@ int main(void)
 	while(1)
 	{
 		Send_signal();
-		_delay_ms(100);
+		_delay_ms(1000);
 		show_distance(distance_cm);
 	}
     return 0;
