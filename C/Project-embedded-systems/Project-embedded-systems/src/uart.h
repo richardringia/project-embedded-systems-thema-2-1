@@ -2,7 +2,9 @@
  * uart.h
  *
  * Created: 04/11/2020 04:36:38
- *  Author: Richard Ringia and Robbin Kok
+ * Author: Richard Ringia and Robbin Kok
+ * 
+ * http://www.rjhcoding.com/avrc-uart.php
  */ 
 
 
@@ -31,52 +33,28 @@ void uart_init() {
 	// set frame format : asynchronous, 8 data bits, 1 stop bit, no parity
 	UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
 	
+	_delay_ms(1000);
 }
 
-
-uint8_t usart_read(){
-	loop_until_bit_is_set(UCSR0A, RXC0); /* Wait until data exists. */
-
+// Read data of arduino with uart
+uint8_t uart_read(){
+	// Wait until data exists
+	loop_until_bit_is_set(UCSR0A, RXC0); 
 	return UDR0;
 }
 
-void usart_transmit(uint8_t data)
+// Send char data to arduino with uart
+void uart_putc(unsigned char data)
 {
-	// wait for an empty transmit buffer
-	// UDRE is set when the transmit buffer is empty
+	// Wait until data exists.
 	loop_until_bit_is_set(UCSR0A,UDRE0);
-	// send the data
+
+	// Load data into transmit register
 	UDR0 = data;
 }
 
-void UART_putc(unsigned char data)
-{
-	// wait for transmit buffer to be empty
-	//while(!(UCSR0A & (1 >> UDRE0)));
-
-	loop_until_bit_is_set(UCSR0A,UDRE0);
-
-	// load data into transmit register
-	UDR0 = data;
-}
-
-
-void UART_puthex8(uint8_t val)
-{
-	// extract upper and lower nibbles from input value
-	uint8_t upperNibble = (val & 0xF0) >> 4;
-	uint8_t lowerNibble = val & 0x0F;
-
-	// convert nibble to its ASCII hex equivalent
-	upperNibble += upperNibble > 9 ? 'A' - 10 : '0';
-	lowerNibble += lowerNibble > 9 ? 'A' - 10 : '0';
-
-	// print the characters
-	UART_putc(upperNibble);
-	UART_putc(lowerNibble);
-}
-
-void UART_putU8(uint8_t val)
+// Transmit decimal with uart
+void uart_transmit(uint8_t val)
 {
 	uint8_t dig1 = '0', dig2 = '0';
 
@@ -95,13 +73,13 @@ void UART_putU8(uint8_t val)
 	}
 
 	// print first digit (or ignore leading zeros)
-	if(dig1 != '0') UART_putc(dig1);
+	if(dig1 != '0') uart_putc(dig1);
 
 	// print second digit (or ignore leading zeros)
-	if((dig1 != '0') || (dig2 != '0')) UART_putc(dig2);
+	if((dig1 != '0') || (dig2 != '0')) uart_putc(dig2);
 
 	// print final digit
-	UART_putc(val + '0');
+	uart_putc(val + '0');
 }
 
 

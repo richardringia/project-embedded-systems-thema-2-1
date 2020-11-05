@@ -37,6 +37,7 @@
 #include <adc.h>
 #include <lights.h>
 #include <temperature.h>
+#include <distance.h>
 
 
 
@@ -44,47 +45,75 @@
 uint16_t max_roll_distance = 300;
 uint16_t min_roll_distance = 0;
 
-
+/************************************************************************/
+/* The send data function is for sending data to the arduino.			*/
+/* read_data is the value for which data it needs to send back			*/
+/* 0 (0x30) = temperature sensor										*/
+/* 1 (0x31) = light sensor												*/
+/* 2 (0x32) = ultrazone senor                                           */
+/************************************************************************/
+void send_data(uint8_t read_data)
+{
+	uint8_t data = 0;
+	
+	switch (read_data)
+	{
+		case 0x30: // temperature
+			data = get_temp();
+		break;
+		case 0x31: // light
+			data = get_light();
+		break;
+		case 0x32: // ultrazone
+			data = get_distance();
+		break;
+		default:
+		break;
+	}
+	
+	uart_transmit(data);
+}
 
 int main (void)
 {
-	/* Insert system clock initialization code here (sysclk_init()). */
+	DDRB = 0x00;
 	DDRD = 0xff;
-	board_init();
-	uart_init();
-	_delay_ms(1000);
 	
+	// init
+	board_init();
+	uart_init();	
 	adc_init();
-
+	distance_init();
 	
 	while (1) {
 		
 		//uint8_t temp = usart_read();
 		
-		uint8_t temp = usart_read();
+		uint8_t read_data = uart_read();
 		//usart_transmit(temp);
 		//UART_putc("A");
-		UART_putU8(get_light());
+		//uart_transmit(read_data);
 		//UART_puthex8(0x41);
+		send_data(read_data);
 		
-		if(temp == 0x31) { 
-			PORTD = 0b11100000;
-		}
-		else { 
-			PORTD = 0b00100000;
-		}
-		/*if (get_light() > 100 && get_temp() > 10)
+		// TEST
+		if(read_data == 0x30) 
+		{ 
+			//
+		} 
+		else if (read_data == 0x31)
 		{
-			PORTD = 0b11100000;
+			//PORTD = 0b01000000;
 		}
-		else
+		else if (read_data == 0x32)
+		{ 
+			//PORTD = 0b00100000;
+		}
+		else 
 		{
-			PORTD = 0b00100000;
-		}*/
+			//PORTD = 0b00000000;
+		}
 
 	}
-	
-	
-	
-	/* Insert application code here, after the board has been initialized. */
+
 }
