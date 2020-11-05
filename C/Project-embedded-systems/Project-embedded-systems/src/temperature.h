@@ -37,16 +37,6 @@ void set_avarage_temp(uint16_t array[index]){
 
 // TODO: change port number
 float get_temp() {
-	/*
-	if (temperatureC > 10)
-	{
-		PORTD = 0b11100000;
-	}
-	else
-	{
-		PORTD = 0b00100000;
-	}
-	*/
 	float value = adc_read(0) * 4.68;
 	value /= 1024.0;
 	return (value - 0.5) * 100;

@@ -15,22 +15,15 @@
 #include <avr/sfr_defs.h>
 #include <util/delay.h>
 
-#define UBBRVAL 51
 
-void uart_init() {
-	// set the baud rate
-	UBRR0H = 0;
-	UBRR0L =  UBBRVAL;
+
+void adc_init() {
+	// AREF = AVcc
+	ADMUX = (1<<REFS0);
 	
-	// disable U2X mode
-	// Remove the prescaler devide by 2 and will increase the speed of the UART to double
-	UCSR0A = 0;
-	
-	// Enable transmitter and reciever
-	UCSR0B = _BV(TXEN0) | (1 << RXEN0);
-	
-	// set frame format : asynchronous, 8 data bits, 1 stop bit, no parity
-	UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
+	// ADC Enable and prescaler of 128
+	// 16000000/128 = 125000
+	ADCSRA = (1<<ADEN)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
 	
 }
 
