@@ -10,8 +10,8 @@ def get_devices():
     ports = serial.tools.list_ports.comports()
     devices = []
     if sys.platform.startswith('win'):
-        # todo: check devices from windows
-        pass
+        for port in ports:
+            devices.append(port.device)
     elif sys.platform.startswith('darwin'):
         for port in ports:
             if port.device.startswith('/dev/cu.usbmodem'):
@@ -22,10 +22,16 @@ def get_devices():
 
     return devices
 
+
+
 for device in get_devices():
-    ser = serial.Serial(device, 192000, timeout=1)
+    
+    ser = serial.Serial(device, 9600, timeout=1)
+
+    #print(device)
     
     while True:
-        ser.write(bytes("abc".encode()))
-        read_val = str(ser.readline())
-        print(ser.read_all())
+        #ser.write(bytes("abc".encode()))
+        #read_val = str(ser.readline())
+        #read_val = bytes(ser.readline(), 'utf-8')
+        print(ser.readline())

@@ -18,10 +18,12 @@
 #define UBBRVAL 51
 #define F_CPU 16E6
 
-void uart_init() {
+void uart_init(uint16_t ubrr) {
 	// set the baud rate
-	UBRR0H = 0;
-	UBRR0L =  UBBRVAL;
+	//UBRR0H = 0;
+	//UBRR0L =  UBBRVAL;
+	UBRR0L = (uint8_t)(ubrr & 0xFF);
+	UBRR0H = (uint8_t)(ubrr >> 8);
 	
 	// disable U2X mode
 	// Remove the prescaler devide by 2 and will increase the speed of the UART to double
