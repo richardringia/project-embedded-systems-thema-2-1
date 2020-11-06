@@ -18,6 +18,9 @@ def get_devices():
             if port.device.startswith('/dev/cu.usbmodem'):
                 devices.append(port.device)
         pass
+    elif sys.platform.startswith('Linux') or sys.platform.startswith('linux'):
+        for port in ports:
+            devices.append(port.device)
     else:
         raise EnvironmentError('Unsupported platform')
 

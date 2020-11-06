@@ -13,7 +13,7 @@ while True:
     #else:
     #    ser.write(bytes("0".encode()))
 
-    ser.write(bytes("1".encode()))
+    ser.write(bytes("kaasje".encode()))
         
     read_val = str(ser.readline())
     print(read_val)
