@@ -4,8 +4,7 @@ import serial.tools.list_ports
 import serial
 import sys
 import time
-
-
+from device import *
 
 def get_devices():
     ports = serial.tools.list_ports.comports()
@@ -29,21 +28,5 @@ def get_devices():
 
 
 for device in get_devices():
-    
-    ser = serial.Serial(device, 19200, timeout=1)
-        
-    while True:    
-        ser.write(bytes("2".encode()))
-        
-        read_val = str(ser.readline())
-        print(read_val)
-
-
-
-    #print(device)
-    
-    # while True:
-    #     #ser.write(bytes("abc".encode()))
-    #     read_val = str(ser.readline())
-    #     #read_val = bytes(ser.readline(), 'utf-8')
-    #     print(read_val)
+    new_device = Device(device)
+    new_device.get_distance()

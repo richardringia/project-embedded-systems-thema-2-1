@@ -251,6 +251,9 @@
     <Compile Include="src\distance.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\leds.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\lights.h">
       <SubType>compile</SubType>
     </Compile>

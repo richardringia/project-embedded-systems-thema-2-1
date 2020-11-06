@@ -38,12 +38,14 @@
 #include <lights.h>
 #include <temperature.h>
 #include <distance.h>
+#include <leds.h>
 
 
 
 
 uint16_t max_roll_distance = 300;
 uint16_t min_roll_distance = 0;
+bool auto_mode = 1;
 
 /************************************************************************/
 /* The send data function is for sending data to the arduino.			*/
@@ -75,6 +77,12 @@ void send_data(uint8_t read_data)
 	uart_transmit(data);
 }
 
+void roll_sunscreen(int mode)
+{
+	
+}
+
+
 int main (void)
 {
 	DDRD = 0x00;
@@ -94,15 +102,15 @@ int main (void)
 		// TEST
 		if(read_data == 0x30) 
 		{ 
-			PORTB = 0b00000100;
+			rolled_out();
 		} 
 		else if (read_data == 0x31)
 		{
-			PORTB = 0b00000010;
+			rolled_in();
 		}
 		else if (read_data == 0x32)
 		{ 
-			PORTB = 0b00100001;
+			rolling();
 		}
 		
 		else 
