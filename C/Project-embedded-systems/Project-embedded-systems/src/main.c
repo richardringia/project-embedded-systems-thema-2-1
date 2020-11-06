@@ -56,6 +56,7 @@ void send_data(uint8_t read_data)
 {
 	uint8_t data = 0;
 	
+	
 	switch (read_data)
 	{
 		case 0x30: // temperature
@@ -76,8 +77,8 @@ void send_data(uint8_t read_data)
 
 int main (void)
 {
-	DDRB = 0x00;
-	DDRD = 0xff;
+	DDRD = 0x00;
+	DDRB = 0xff;
 	
 	// init
 	board_init();
@@ -86,32 +87,27 @@ int main (void)
 	distance_init();
 	
 	while (1) {
-		
-		//uint8_t temp = usart_read();
-		
 		uint8_t read_data = uart_read();
-		//usart_transmit(temp);
-		//UART_putc("A");
-		//uart_transmit(read_data);
-		//UART_puthex8(0x41);
+		
 		send_data(read_data);
 		
 		// TEST
 		if(read_data == 0x30) 
 		{ 
-			//
+			PORTB = 0b00000100;
 		} 
 		else if (read_data == 0x31)
 		{
-			//PORTD = 0b01000000;
+			PORTB = 0b00000010;
 		}
 		else if (read_data == 0x32)
 		{ 
-			//PORTD = 0b00100000;
+			PORTB = 0b00100001;
 		}
+		
 		else 
 		{
-			//PORTD = 0b00000000;
+			PORTB = 0b00000000;
 		}
 
 	}
