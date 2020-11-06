@@ -18,12 +18,12 @@ class Device:
     def __get_value(self, type):
         counter = 0
         value = b''
-        while value == b'' and counter < 6:
+        while (value == b'' or value == b'0') and counter < 6:
             self.serial.write(bytes(type.encode()))
             value = self.serial.readline()
             counter +=1
         
-        return value
+        return str(value, 'utf-8')
 
 
 

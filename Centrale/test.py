@@ -1,19 +1,18 @@
 import serial
 import time
+import connect
+import threading
 
-ser = serial.Serial('COM3', 19200, timeout=1)
 
-print(ser)
 
-while True:
-    #value = input("LED On or [Off]:\n")
+array_temp = dict()
+array_light = dict()
 
-    #if value == "On":
-    #    ser.write(bytes("1".encode()))
-    #else:
-    #    ser.write(bytes("0".encode()))
+device = connect.get_devices()[0]
 
-    ser.write(bytes("kaasje".encode()))
-        
-    read_val = str(ser.readline())
-    print(read_val)
+def get_temp_every_60_sec():
+    threading.Timer(60.0, get_temp_every_60_sec).start() # called every minute
+    print(device.get_temp())
+
+get_temp_every_60_sec()
+# print(device.get_temp())

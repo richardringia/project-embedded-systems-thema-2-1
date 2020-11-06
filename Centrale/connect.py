@@ -11,22 +11,16 @@ def get_devices():
     devices = []
     if sys.platform.startswith('win'):
         for port in ports:
-            devices.append(port.device)
+            devices.append(Device(port.device))
     elif sys.platform.startswith('darwin'):
         for port in ports:
             if port.device.startswith('/dev/cu.usbmodem'):
-                devices.append(port.device)
+                devices.append(Device(port.device))
         pass
     elif sys.platform.startswith('Linux') or sys.platform.startswith('linux'):
         for port in ports:
-            devices.append(port.device)
+            devices.append(Device(port.device))
     else:
         raise EnvironmentError('Unsupported platform')
 
     return devices
-
-
-
-for device in get_devices():
-    new_device = Device(device)
-    new_device.get_distance()
