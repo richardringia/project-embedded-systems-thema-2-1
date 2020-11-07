@@ -93,100 +93,114 @@ class MyEntry(Entry):
     def __init__(self, parent, text):
         super().__init__(parent, text=text)
 
-
-# Definitions
 mainFrame = MainFrame()
 tabControl = TabControl(mainFrame)
 tabControl.grid(row=0)
 
 
-def createTab(name):
-    tab = Tab(tabControl, name)
-    tabControl.addTab(tab)
-
-    devTab = WindowPane(tab, HORIZONTAL)
-    devTab.grid(row=0, column=1)
-
-    pw1 = WindowPane(devTab, VERTICAL)
-    pw2 = WindowPane(devTab, VERTICAL)
-
-    placeholder1 = WindowPane(pw1, HORIZONTAL)
-    placeholder2 = WindowPane(pw2, HORIZONTAL)
-    placeholder3 = WindowPane(pw2, HORIZONTAL)
-
-    graph1 = Graph()
-    graph2 = Graph()
-
-    graph1 = Canvas(width=350, height=250, background="white")
-    graph1.create_line(0, 0, 350, 250, fill="blue")
-    graph1.create_line(0, 250, 350, 0, fill="red")
-
-    graph2 = Canvas(width=350, height=250, background="white")
-    graph2.create_line(0, 0, 350, 250, fill="blue")
-    graph2.create_line(0, 250, 350, 0, fill="red")
-
-    afstandLabel = MyLabel(pw1, "AFSTANDAFBEELDING 1")
-    instellingenLabel = MyLabel(pw1, "Instelling 1")
-    temperatuurLabel = MyLabel(pw2, "Temperatuur 1")
-    lichtLabel = MyLabel(pw2, "Licht 1")
-
-    emptylabel = MyLabel(pw2, "")
-    emptylabel2 = MyLabel(placeholder1, "")
-    emptylabel3 = MyLabel(pw2, "")
-    emptylabel4 = MyLabel(pw2, "")
-
-    devTab.addLabels(pw1, pw2, height=0)
-    btn = MyButton(placeholder1, name)
-
-    pw1.addLabels(afstandLabel, instellingenLabel, height=250)
-    pw1.addLabel(placeholder1, 30, 100)
-    placeholder1.addLabel(btn, 50, 100)
-    placeholder1.addLabel(emptylabel2, 30, 100)
-
-    pw2.addLabels(temperatuurLabel, height=0)
-    # pw2.addLabel(placeholder2, 250, 10)
-    # placeholder2.addLabel(graph1, 250, 350)
-    # placeholder2.addLabel(emptylabel3, 30, 0)
-    pw2.addLabel(graph1, 0, 0)
-
-    pw1.grid(row=0, column=0)
-    pw2.grid(row=0, column=1, pady=(0, 50))
-
-    pw2.addLabels(lichtLabel, height=0)
-    pw2.addLabel(placeholder3, 250, 10)
-    placeholder3.addLabel(graph2, 250, 350)
-    placeholder3.addLabel(emptylabel4, 30, 0)
+class Main:
+    def __init__(self, name):
+        self.x2 = 40
+        self.y2 = self.yValue(0)
+        self.s = 1
+        
+        self.createTab(name)
 
 
+    def createTab(self, name):
+        self.tab = Tab(tabControl, name)
+        tabControl.addTab(self.tab)
 
-    pw2.addLabel(emptylabel, 20, 100)
+        devTab = WindowPane(self.tab, HORIZONTAL)
+        devTab.grid(row=0, column=1)
+
+        pw1 = WindowPane(devTab, VERTICAL)
+        pw2 = WindowPane(devTab, VERTICAL)
+
+        placeholder1 = WindowPane(pw1, HORIZONTAL)
+        placeholder2 = WindowPane(pw2, HORIZONTAL)
+        placeholder3 = WindowPane(pw2, HORIZONTAL)
+
+        self.graph1 = Graph()
+        self.graph2 = Graph()
+
+        self.graph1 = Canvas(width=350, height=250, background="white")
+
+        self.graph2 = Canvas(width=350, height=250, background="white")
+
+        afstandLabel = MyLabel(pw1, "AFSTANDAFBEELDING 1")
+        instellingenLabel = MyLabel(pw1, "Instelling 1")
+        temperatuurLabel = MyLabel(pw2, "Temperatuur 1")
+        lichtLabel = MyLabel(pw2, "Licht 1")
+
+        emptylabel = MyLabel(pw2, "")
+        emptylabel2 = MyLabel(placeholder1, "")
+        emptylabel3 = MyLabel(pw2, "")
+        emptylabel4 = MyLabel(pw2, "")
+
+        devTab.addLabels(pw1, pw2, height=0)
+        btn = MyButton(placeholder1, name)
+
+        pw1.addLabels(afstandLabel, instellingenLabel, height=250)
+        pw1.addLabel(placeholder1, 30, 100)
+        placeholder1.addLabel(btn, 50, 100)
+        placeholder1.addLabel(emptylabel2, 30, 100)
+        
+        pw2.addLabels(temperatuurLabel, height=0)
+        pw2.addLabel(placeholder2, 0, 10)
+        placeholder2.addLabel(self.graph1, 250, 350)
+        placeholder2.addLabel(emptylabel3, 30, 0)
+        #pw2.addLabel(graph1, 0, 0)
+        #pw1.grid(row=0, column=0)
+        #pw2.grid(row=0, column=1, padx=(10, 10))    
+
+        self.graphInit(self.graph1)
+        self.graphInit(self.graph2)
+
+        pw2.addLabels(lichtLabel, height=0)
+        pw2.addLabel(placeholder3, 250, 10)
+        placeholder3.addLabel(self.graph2, 250, 350)
+        placeholder3.addLabel(emptylabel4, 30, 0)
+
+        
+        
+        pw2.addLabel(emptylabel, 20, 100)
+
+    def yValue(self, value):
+        return 220 - value * 2.5
+
+    def drawLine(self, y):
+        self.x1 = self.x2
+        self.y1 = self.y2
+        self.x2 = 40 + 25 * self.s
+        self.y2 = self.yValue(y)
+        self.graph1.create_line(self.x1, self.y1, self.x2, self.y2, fill="blue")
+        self.graph2.create_line(self.x1, self.y1, self.x2, self.y2, fill="blue")
+        self.s = self.s + 1
+    
+    def graphInit(self, graph):
+        for i in range(13):
+            x = 40 + (i * 25)
+            graph.create_line(x,220,x,20, width=1, dash=(2,5))
+            graph.create_text(x,220, text='%d'% (10*i), anchor=N)
+        for i in range(9):
+            y = 220 - (i * 25)
+            graph.create_line(40,y,340,y, width=1, dash=(2,5))
+            graph.create_text(30,y, text='%d'% (10*i), anchor=E)
 
 
-createTab('Device 1')
-createTab('Device 2')
+main1 = Main("Device 1")
+main2 = Main("Device 2")
 
+main1.drawLine(70)
+main1.drawLine(50)
+main1.drawLine(30)
+main1.drawLine(40)
+main1.drawLine(10)
+main1.drawLine(20)
+main1.drawLine(80)
+main1.drawLine(60)
 
-## TESTCODE##########################################
-
-def createTestTab(name):
-
-    tab = Tab(tabControl, name)
-    tabControl.addTab(tab)
-
-    devTab = WindowPane(tab, HORIZONTAL)
-    devTab.grid(row=0, rowspan=5)
-    devTab.config(bg='black')
-
-    pw1 = WindowPane(devTab, VERTICAL)
-    pw1.config(bg='black')
-
-    #graph = Graph(devTab)
-    #devTab.addLabel(graph, 500)
-
-
-# Create test tab
-createTestTab('TEST')
-
-#####################################################
 
 mainFrame.mainloop()
+
