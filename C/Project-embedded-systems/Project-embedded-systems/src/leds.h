@@ -2,7 +2,7 @@
  * leds.h
  *
  * Created: 06/11/2020 17:04:35
- *  Author: robbi
+ *  Author: Ricahrd Ringia & Robbin Kok
  */ 
 
 
