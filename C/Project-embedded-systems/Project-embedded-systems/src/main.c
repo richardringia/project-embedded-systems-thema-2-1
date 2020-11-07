@@ -79,7 +79,19 @@ void send_data(uint8_t read_data)
 
 void roll_sunscreen(int mode)
 {
-	
+
+	switch (mode){
+		case 1:
+			rolling();
+			rolled_out();
+			break;
+		case 2:
+			rolling();
+			rolled_in();
+			break;
+		default:
+			break;
+	}
 }
 
 
@@ -102,7 +114,7 @@ int main (void)
 		// TEST
 		if(read_data == 0x30) 
 		{ 
-			rolled_out();
+			roll_sunscreen(2);
 		} 
 		else if (read_data == 0x31)
 		{
@@ -110,7 +122,7 @@ int main (void)
 		}
 		else if (read_data == 0x32)
 		{ 
-			rolling();
+			rolled_out();
 		}
 		
 		else 
