@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
-
+import connect
 
 class MainFrame(Tk):
 
@@ -256,36 +256,39 @@ class Main:
             graph.create_text(30,y, text='%d'% (10*i), anchor=E)
 
 
-main1 = Main("Device 1")
-main2 = Main("Device 2")
+for device in connect.get_devices():
+    main = Main(device.port)
+
+# main1 = Main("Device 1")
+# main2 = Main("Device 2")
 
 
-main1.drawLight(70)
-main1.drawLight(50)
-main1.drawLight(30)
-main1.drawLight(40)
-main1.drawLight(10)
-main1.drawLight(20)
-main1.drawLight(80)
-main1.drawLight(60)
-main1.drawLight(70)
-main1.drawLight(50)
-main1.drawLight(30)
-main1.drawLight(60)
+# main1.drawLight(70)
+# main1.drawLight(50)
+# main1.drawLight(30)
+# main1.drawLight(40)
+# main1.drawLight(10)
+# main1.drawLight(20)
+# main1.drawLight(80)
+# main1.drawLight(60)
+# main1.drawLight(70)
+# main1.drawLight(50)
+# main1.drawLight(30)
+# main1.drawLight(60)
 
 
-main1.drawTemperature(51)
-main1.drawTemperature(32)
-main1.drawTemperature(45)
-main1.drawTemperature(17)
-main1.drawTemperature(29)
-main1.drawTemperature(55)
-main1.drawTemperature(11)
-main1.drawTemperature(72)
-main1.drawTemperature(31)
-main1.drawTemperature(81)
-main1.drawTemperature(1)
-main1.drawTemperature(17)
+# main1.drawTemperature(51)
+# main1.drawTemperature(32)
+# main1.drawTemperature(45)
+# main1.drawTemperature(17)
+# main1.drawTemperature(29)
+# main1.drawTemperature(55)
+# main1.drawTemperature(11)
+# main1.drawTemperature(72)
+# main1.drawTemperature(31)
+# main1.drawTemperature(81)
+# main1.drawTemperature(1)
+# main1.drawTemperature(17)
 
 mainFrame.mainloop()
 
