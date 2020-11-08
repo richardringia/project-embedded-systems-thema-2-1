@@ -94,6 +94,7 @@ class MyEntry(Entry):
     def __init__(self, parent, text):
         super().__init__(parent, text=text)
 
+
 mainFrame = MainFrame()
 tabControl = TabControl(mainFrame)
 tabControl.grid(row=0)
@@ -109,7 +110,8 @@ class Main:
 
         self.tempAxis = 1
         self.lightAxis = 1
-        
+
+        # verplaatst vanuit createTab()
         self.graph1 = Canvas(width=350, height=250, background="white")
         self.graph2 = Canvas(width=350, height=250, background="white")
         self.imageCanvas = Canvas(width=350, height=250, background="black")
@@ -117,6 +119,7 @@ class Main:
         self.setImage('zonnescherm80.png')
 
         self.createTab(name)
+
 
     def createTab(self, name):
         self.tab = Tab(tabControl, name)
@@ -141,15 +144,27 @@ class Main:
         temperatuurLabel = MyLabel(pw2, "Temperatuur 1")
         lichtLabel = MyLabel(pw2, "Licht 1")
 
+        entryLabelAfstand = MyLabel(pw1, "Afstand:")
+        entryLabelTemperatuur = MyLabel(pw1, "Temperatuur:")
+        entryLabelLicht = MyLabel(pw1, "Licht:")
+
+        entryAfstand = MyEntry(pw1, "Afstand TEST TEST")
+        entryTemperatuur = MyEntry(pw1, "Temperatuur TEST TEST")
+        entryLicht = MyEntry(pw1, "Licht TEST TEST")
+
+
+
         emptylabel = MyLabel(pw2, "")
         emptylabel2 = MyLabel(placeholder1, "")
         emptylabel3 = MyLabel(pw2, "")
         emptylabel4 = MyLabel(pw2, "")
 
         devTab.addLabels(pw1, pw2, height=0)
-        btn = MyButton(placeholder1, name)
+        btn = MyButton(placeholder1, 'Instellen '+name)
 
-        pw1.addLabels(afstandLabel, self.imageCanvas, instellingenLabel, height=0)
+        pw1.addLabels(afstandLabel, self.imageCanvas, instellingenLabel,
+                      entryLabelAfstand, entryAfstand, entryLabelTemperatuur, entryTemperatuur,
+                      entryLabelLicht, entryLicht, height=0)
         pw1.addLabel(placeholder1, 30, 100)
         placeholder1.addLabel(btn, 50, 100)
         placeholder1.addLabel(emptylabel2, 30, 100)
@@ -217,6 +232,7 @@ class Main:
 
 main1 = Main("Device 1")
 main2 = Main("Device 2")
+
 
 main1.drawLight(70)
 main1.drawLight(50)
