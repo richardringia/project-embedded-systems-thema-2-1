@@ -43,44 +43,15 @@ uint8_t uart_read(){
 	return UDR0;
 }
 
-// Send char data to arduino with uart
-void uart_putc(unsigned char data)
-{
-	// Wait until data exists.
+
+void uart_send(int data) {
 	loop_until_bit_is_set(UCSR0A,UDRE0);
 
 	// Load data into transmit register
 	UDR0 = data;
 }
 
-// Transmit decimal with uart
-void uart_transmit(uint8_t val)
-{
-	uint8_t dig1 = '0', dig2 = '0';
 
-	// count value in 100s place
-	while(val >= 100)
-	{
-		val -= 100;
-		dig1++;
-	}
-
-	// count value in 10s place
-	while(val >= 10)
-	{
-		val -= 10;
-		dig2++;
-	}
-
-	// print first digit (or ignore leading zeros)
-	if(dig1 != '0') uart_putc(dig1);
-
-	// print second digit (or ignore leading zeros)
-	if((dig1 != '0') || (dig2 != '0')) uart_putc(dig2);
-
-	// print final digit
-	uart_putc(val + '0');
-}
 
 
 

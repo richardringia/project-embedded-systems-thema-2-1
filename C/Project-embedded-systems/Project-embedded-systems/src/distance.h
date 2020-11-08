@@ -84,10 +84,11 @@ ISR (INT1_vect)
 }
 
 //Signal to hc-sr04
-void Send_signal()
+void send_signal_distance()
 {
 	if(working==0)
 	{
+		
 		_delay_ms(50);
 		PORTD &=~ (1<<PIND0);
 		_delay_us(1);
@@ -96,10 +97,8 @@ void Send_signal()
 		PORTD &=~ (1<<PIND0);
 		working = 1;
 		error = 0;
-	}
+	} 
 }
-
-//********** end display ***********
 
 void init_ports(void)
 {
@@ -133,8 +132,6 @@ uint16_t calc_cm(uint16_t counter)
 
 int get_distance() 
 {
-	Send_signal();
-	_delay_ms(1000);
 	return distance_cm;
 }
 
@@ -143,7 +140,6 @@ int distance_init(void)
 	init_ports();
 	init_ext_int();
 	init_timer();
-	sei();
 	
     return 0;
 }
