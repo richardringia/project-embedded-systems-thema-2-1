@@ -84,8 +84,8 @@ class MyLabel(Label):
 
 class MyButton(Button):
 
-    def __init__(self, parent, text):
-        super().__init__(parent, text=text)
+    def __init__(self, parent, text, command):
+        super().__init__(parent, text=text, command=command)
         #self.config(height=50, width=50)
 
 
@@ -111,12 +111,19 @@ class Main:
         self.tempAxis = 1
         self.lightAxis = 1
 
+        # Entry values (met default)
+        self.Afstand = 100
+        self.MinTemperatuur = 10
+        self.MaxTemperatuur = 20
+        self.MinLicht = 10
+        self.MaxLicht = 20
+
         # graph verplaatst vanuit createTab()
         self.graph1 = Canvas(width=350, height=250, background="white")
         self.graph2 = Canvas(width=350, height=250, background="white")
 
         # Image
-        self.imageCanvas = Canvas(width=350, height=250, background="black")
+        self.imageCanvas = Canvas(width=350, height=250, background="white")
         self.setImage('zonnescherm80.png')
 
         self.createTab(name)
@@ -136,9 +143,6 @@ class Main:
         placeholder2 = WindowPane(pw2, HORIZONTAL)
         placeholder3 = WindowPane(pw2, HORIZONTAL)
 
-        self.imageCanvas.image = self.filename
-        self.imageCanvas.create_image(0, 0, anchor=NW, image=self.filename)
-
 
         afstandLabel = MyLabel(pw1, "AFSTANDAFBEELDING 1")
         instellingenLabel = MyLabel(pw1, "Instelling 1")
@@ -151,11 +155,17 @@ class Main:
         entryLabelMinLicht = MyLabel(pw1, "Min Licht:")
         entryLabelMaxLicht = MyLabel(pw1, "Max Licht:")
 
-        entryAfstand = MyEntry(pw1, "Afstand TEST TEST")
-        entryMinTemperatuur = MyEntry(pw1, "Min Temperatuur TEST TEST")
-        entryMaxTemperatuur = MyEntry(pw1, "Max Temperatuur TEST TEST")
-        entryMinLicht = MyEntry(pw1, "Min Licht TEST TEST")
-        entryMaxLicht = MyEntry(pw1, "Max Licht TEST TEST")
+        self.entryAfstand = MyEntry(pw1, "Afstand TEST TEST")
+        self.entryMinTemperatuur = MyEntry(pw1, "Min Temperatuur TEST TEST")
+        self.entryMaxTemperatuur = MyEntry(pw1, "Max Temperatuur TEST TEST")
+        self.entryMinLicht = MyEntry(pw1, "Min Licht TEST TEST")
+        self.entryMaxLicht = MyEntry(pw1, "Max Licht TEST TEST")
+
+        self.entryAfstand.insert(0, self.Afstand)
+        self.entryMinTemperatuur.insert(0, self.MinTemperatuur)
+        self.entryMaxTemperatuur.insert(0, self.MaxTemperatuur)
+        self.entryMinLicht.insert(0, self.MinLicht)
+        self.entryMaxLicht.insert(0, self.MaxLicht)
 
 
         emptylabel = MyLabel(pw2, "")
@@ -164,14 +174,14 @@ class Main:
         emptylabel4 = MyLabel(pw2, "")
 
         devTab.addLabels(pw1, pw2, height=0)
-        btn = MyButton(placeholder1, 'Instellen '+name)
+        btn = MyButton(placeholder1, 'Instellen '+name, self.setSettings)
 
         pw1.addLabels(afstandLabel, self.imageCanvas, instellingenLabel,
-                      entryLabelAfstand, entryAfstand,
-                      entryLabelMinTemperatuur, entryMinTemperatuur,
-                      entryLabelMaxTemperatuur, entryMaxTemperatuur,
-                      entryLabelMinLicht, entryMinLicht,
-                      entryLabelMaxLicht, entryMaxLicht,
+                      entryLabelAfstand, self.entryAfstand,
+                      entryLabelMinTemperatuur, self.entryMinTemperatuur,
+                      entryLabelMaxTemperatuur, self.entryMaxTemperatuur,
+                      entryLabelMinLicht, self.entryMinLicht,
+                      entryLabelMaxLicht, self.entryMaxLicht,
                       height=0)
         pw1.addLabel(placeholder1, 30, 100)
         placeholder1.addLabel(btn, 50, 100)
@@ -193,12 +203,19 @@ class Main:
         placeholder3.addLabel(self.graph2, 250, 350)
         placeholder3.addLabel(emptylabel4, 30, 0)
 
-                
         pw2.addLabel(emptylabel, 20, 100)
 
     def setImage(self, filename):
         self.filename = ImageTk.PhotoImage(Image.open("afbeeldingen/"+filename))
+        self.imageCanvas.image = self.filename
+        self.imageCanvas.create_image(25, 5, anchor=NW, image=self.filename)
 
+    def setSettings(self):
+        self.Afstand = self.entryAfstand.get()
+        self.MinTemperatuur = self.entryMinTemperatuur.get()
+        self.MaxTemperatuur = self.entryMaxTemperatuur.get()
+        self.MinLicht = self.entryMinLicht.get()
+        self.MaxLicht = self.entryMaxLicht.get()
 
     def yValue(self, value):
         return 220 - value * 2.5
