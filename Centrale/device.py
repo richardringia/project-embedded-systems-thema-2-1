@@ -2,12 +2,13 @@ import serial
 
 class Device:
 
-   def __init__(self, port):
-       self.serial = serial.Serial(port, 19200, timeout=1)
-       while True:
-           self.serial.write(bytes("0".encode()))
-           serial_data = int.from_bytes(self.serial.read(), byteorder='little')
-           print(serial_data)
+  def __init__(self, port):
+    self.port = port
+    self.serial = serial.Serial(port, 19200, timeout=1)
+    # while True:
+    #   self.serial.write(bytes("0".encode()))
+    #   serial_data = int.from_bytes(self.serial.read(), byteorder='little')
+    #   print(serial_data)
 
 
 
