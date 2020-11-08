@@ -26,12 +26,32 @@ class WindowPane(PanedWindow):
 
 class Graph(Canvas):
 
-    def __init__(self ):
+    def __init__(self):
         super().__init__()
-
         self.canvas = Canvas(self, width=1200, height=600, background="white")
-        self.canvas.create_line(0, 0, 200, 100)
-        self.canvas.create_line(0, 100, 200, 0, fill='red')
+        self.draw_axes()
+        self.draw_roster()
+
+    def draw_axes(self):
+        # X-axis
+        self.canvas.create_line(0, 0, 500, 0)
+        # Y-axis
+        self.canvas.create_line(0, 0, 0, 500)
+
+    def draw_roster(self):
+        # x-axis
+        for i in range(23):
+            x = 50 + (i * 50)
+            self.canvas.create_line(x, 550, x, 50, width=1, dash=(2, 5))
+            self.canvas.create_text(x, 550, text='%d' % (10 * i), anchor=N)
+        # y-axis
+        for i in range(11):
+            y = 550 - (i * 50)
+            self.canvas.create_line(50, y, 1150, y, width=1, dash=(2, 5))
+            self.canvas.create_text(40, y, text='%d' % (10 * i), anchor=E)
+
+    #def drawLine(self, x1, y1, x2, y2, arg=''):
+    #    self.canvas.create_line(x1, y1, x2, y2, fill=arg)
 
 
 class TabControl(ttk.Notebook):
@@ -76,6 +96,7 @@ class MyEntry(Entry):
 mainFrame = MainFrame()
 tabControl = TabControl(mainFrame)
 tabControl.grid(row=0)
+
 
 class Main:
     def __init__(self, name):
@@ -218,10 +239,5 @@ main1.drawTemperature(81)
 main1.drawTemperature(1)
 main1.drawTemperature(17)
 
-## TESTCODE##########################################
-
-
-
-#####################################################
 mainFrame.mainloop()
 
