@@ -1,7 +1,11 @@
 from tkinter import *
 from tkinter import ttk
+<<<<<<< HEAD
 from PIL import Image, ImageTk
 
+=======
+from PIL import ImageTk
+>>>>>>> a0e949b4d20d61b1423891ef87c040ebbe42188a
 
 class MainFrame(Tk):
 
@@ -101,10 +105,15 @@ tabControl.grid(row=0)
 
 class Main:
     def __init__(self, name):
-        self.x2 = 40
-        self.y2 = self.yValue(0)
-        self.s = 1
+        self.tempx2 = 40
+        self.lightx2 = 40
 
+        self.lighty2 = self.yValue(0)
+        self.tempy2 = self.yValue(0)
+
+        self.tempAxis = 1
+        self.lightAxis = 1
+        
         self.graph1 = Canvas(width=350, height=250, background="white")
         self.graph2 = Canvas(width=350, height=250, background="white")
         self.imageCanvas = Canvas(width=350, height=250, background="black")
@@ -175,20 +184,35 @@ class Main:
     def yValue(self, value):
         return 220 - value * 2.5
 
-    def drawLine(self, y):
-        self.x1 = self.x2
-        self.y1 = self.y2
-        self.x2 = 40 + 25 * self.s
-        self.y2 = self.yValue(y)
-        self.graph1.create_line(self.x1, self.y1, self.x2, self.y2, fill="blue")
-        self.graph2.create_line(self.x1, self.y1, self.x2, self.y2, fill="blue")
-        self.s = self.s + 1
+    def drawTemperature(self, y):
+        if (self.tempAxis == 13):
+            self.tempAxis = 1
+            self.graph1.delete("temp")
+            self.tempx2 = 40
+        self.tempx1 = self.tempx2
+        self.tempy1 = self.tempy2
+        self.tempx2 = 40 + 25 * self.tempAxis
+        self.tempy2 = self.yValue(y)
+        self.graph1.create_line(self.tempx1, self.tempy1, self.tempx2, self.tempy2, fill="blue", tags="temp")
+        self.tempAxis = self.tempAxis + 1
     
+    def drawLight(self, y):
+        if (self.lightAxis == 13):
+            self.lightAxis = 1
+            self.graph2.delete("temp")
+            self.lightx2 = 40
+        self.lightx1 = self.lightx2
+        self.lighty1 = self.lighty2
+        self.lightx2 = 40 + 25 * self.lightAxis
+        self.lighty2 = self.yValue(y)
+        self.graph2.create_line(self.lightx1, self.lighty1, self.lightx2, self.lighty2, fill="blue", tags="temp")
+        self.lightAxis = self.lightAxis + 1
+
     def graphInit(self, graph):
         for i in range(13):
             x = 40 + (i * 25)
             graph.create_line(x,220,x,20, width=1, dash=(2,5))
-            graph.create_text(x,220, text='%d'% (10*i), anchor=N)
+            graph.create_text(x,220, text='%d'% (i), anchor=N)
         for i in range(9):
             y = 220 - (i * 25)
             graph.create_line(40,y,340,y, width=1, dash=(2,5))
@@ -198,15 +222,32 @@ class Main:
 main1 = Main("Device 1")
 main2 = Main("Device 2")
 
-main1.drawLine(70)
-main1.drawLine(50)
-main1.drawLine(30)
-main1.drawLine(40)
-main1.drawLine(10)
-main1.drawLine(20)
-main1.drawLine(80)
-main1.drawLine(60)
+main1.drawLight(70)
+main1.drawLight(50)
+main1.drawLight(30)
+main1.drawLight(40)
+main1.drawLight(10)
+main1.drawLight(20)
+main1.drawLight(80)
+main1.drawLight(60)
+main1.drawLight(70)
+main1.drawLight(50)
+main1.drawLight(30)
+main1.drawLight(60)
 
+
+main1.drawTemperature(51)
+main1.drawTemperature(32)
+main1.drawTemperature(45)
+main1.drawTemperature(17)
+main1.drawTemperature(29)
+main1.drawTemperature(55)
+main1.drawTemperature(11)
+main1.drawTemperature(72)
+main1.drawTemperature(31)
+main1.drawTemperature(81)
+main1.drawTemperature(1)
+main1.drawTemperature(17)
 
 mainFrame.mainloop()
 

@@ -39,13 +39,13 @@
 #include <temperature.h>
 #include <distance.h>
 #include <leds.h>
-
+#include <stdbool.h>
 
 
 
 uint16_t max_roll_distance = 300;
 uint16_t min_roll_distance = 0;
-bool auto_mode = 1;
+bool auto_mode = true;
 
 /************************************************************************/
 /* The send data function is for sending data to the arduino.			*/
@@ -77,9 +77,37 @@ void send_data(uint8_t read_data)
 	uart_transmit(data);
 }
 
+/************************************************************************/
+/* The change mode function is used for changing the value of the bool.	*/
+/* If the bool is true it becomes false.								*/
+/* If the bool is false it becomes true									*/
+/************************************************************************/
+
+void change_mode(){
+	auto_mode = !auto_mode;
+}
+
+
+/************************************************************************/
+/* The roll sunscreen function is for controlling the leds.				*/
+/* 0 = Rolling the screen out and burning the corresponding led.		*/
+/* 1 = Rolling the screen in and burning the corresponding led.		    */
+/************************************************************************/
+
 void roll_sunscreen(int mode)
 {
-	
+	switch (mode){
+		case 0:
+			rolling();
+			rolled_out();
+			break;
+		case 1:
+			rolling();
+			rolled_in();
+			break;
+		default:
+			break;
+	}
 }
 
 
@@ -102,15 +130,15 @@ int main (void)
 		// TEST
 		if(read_data == 0x30) 
 		{ 
-			rolled_out();
+			//roll_sunscreen(2);
 		} 
 		else if (read_data == 0x31)
 		{
-			rolled_in();
+			//rolled_in();
 		}
 		else if (read_data == 0x32)
 		{ 
-			rolling();
+			//rolled_out();
 		}
 		
 		else 

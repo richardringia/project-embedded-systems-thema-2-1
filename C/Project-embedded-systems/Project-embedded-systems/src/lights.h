@@ -2,7 +2,7 @@
  * lights.h
  *
  * Created: 04/11/2020 04:53:53
- *  Author: rring
+ *  Author: Richard Ringia & Robbin Kok
  */ 
 
 
