@@ -46,6 +46,7 @@
 uint16_t max_roll_distance = 300;
 uint16_t min_roll_distance = 0;
 bool auto_mode = true;
+int distance = 0;
 
 /************************************************************************/
 /* The send data function is for sending data to the arduino.			*/
@@ -74,7 +75,7 @@ void send_data(uint8_t read_data)
 		break;
 	}
 	
-	uart_transmit(data);
+	uart_send(data);
 }
 
 /************************************************************************/
@@ -98,11 +99,11 @@ void roll_sunscreen(int mode)
 {
 	switch (mode){
 		case 0:
-			rolling();
+			//rolling();
 			rolled_out();
 			break;
 		case 1:
-			rolling();
+			//rolling();
 			rolled_in();
 			break;
 		default:
@@ -122,30 +123,27 @@ int main (void)
 	adc_init();
 	distance_init();
 	
+	sei();
+	
+	
 	while (1) {
-		uint8_t read_data = uart_read();
+		send_signal_distance();
+		_delay_ms(1000);
 		
+		
+		uint8_t read_data = uart_read();
 		send_data(read_data);
 		
-		// TEST
-		if(read_data == 0x30) 
-		{ 
-			//roll_sunscreen(2);
-		} 
-		else if (read_data == 0x31)
-		{
-			//rolled_in();
-		}
-		else if (read_data == 0x32)
-		{ 
-			//rolled_out();
-		}
 		
-		else 
-		{
+		int new_distance = get_distance();
+		
+		if (new_distance != distance) {
+			rolling();
+		} else {
 			PORTB = 0b00000000;
 		}
-
+		distance = new_distance;	
 	}
+	
 
 }

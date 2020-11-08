@@ -39,7 +39,7 @@ void set_avarage_temp(uint16_t array[index]){
 float get_temp() {
 	float value = adc_read(0) * 4.68;
 	value /= 1024.0;
-	return (value - 0.5) * 100;
+	return ((value - 0.5) * 100) * 0.5;
 }
 
 
