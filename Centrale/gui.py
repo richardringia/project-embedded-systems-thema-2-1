@@ -161,6 +161,7 @@ class Main:
         self.entryMinLicht = MyEntry(pw1, "Min Licht TEST TEST")
         self.entryMaxLicht = MyEntry(pw1, "Max Licht TEST TEST")
 
+
         self.entryAfstand.insert(0, self.Afstand)
         self.entryMinTemperatuur.insert(0, self.MinTemperatuur)
         self.entryMaxTemperatuur.insert(0, self.MaxTemperatuur)
