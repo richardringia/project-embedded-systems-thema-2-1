@@ -3,6 +3,7 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 import connect
 
+
 class MainFrame(Tk):
 
     def __init__(self):
@@ -92,7 +93,8 @@ class MyButton(Button):
 class MyEntry(Entry):
 
     def __init__(self, parent, text):
-        super().__init__(parent, text=text)
+        super().__init__(parent)
+        self.insert(0, text)
 
 
 mainFrame = MainFrame()
@@ -123,7 +125,7 @@ class Main:
         self.graph2 = Canvas(width=350, height=250, background="white")
 
         # Image
-        self.imageCanvas = Canvas(width=350, height=250, background="white")
+        self.imageCanvas = Canvas(width=350, height=250, background="gray94")
         self.setImage('zonnescherm80.png')
 
         self.createTab(name)
@@ -144,10 +146,10 @@ class Main:
         placeholder3 = WindowPane(pw2, HORIZONTAL)
 
 
-        afstandLabel = MyLabel(pw1, "AFSTANDAFBEELDING 1")
-        instellingenLabel = MyLabel(pw1, "Instelling 1")
-        temperatuurLabel = MyLabel(pw2, "Temperatuur 1")
-        lichtLabel = MyLabel(pw2, "Licht 1")
+        afstandLabel = MyLabel(pw1, "Lengte")
+        instellingenLabel = MyLabel(pw1, "Instellingen")
+        temperatuurLabel = MyLabel(pw2, "Temperatuur")
+        lichtLabel = MyLabel(pw2, "Licht")
 
         entryLabelAfstand = MyLabel(pw1, "Afstand:")
         entryLabelMinTemperatuur = MyLabel(pw1, "Min Temperatuur:")
@@ -155,19 +157,11 @@ class Main:
         entryLabelMinLicht = MyLabel(pw1, "Min Licht:")
         entryLabelMaxLicht = MyLabel(pw1, "Max Licht:")
 
-        self.entryAfstand = MyEntry(pw1, "Afstand TEST TEST")
-        self.entryMinTemperatuur = MyEntry(pw1, "Min Temperatuur TEST TEST")
-        self.entryMaxTemperatuur = MyEntry(pw1, "Max Temperatuur TEST TEST")
-        self.entryMinLicht = MyEntry(pw1, "Min Licht TEST TEST")
-        self.entryMaxLicht = MyEntry(pw1, "Max Licht TEST TEST")
-
-
-        self.entryAfstand.insert(0, self.Afstand)
-        self.entryMinTemperatuur.insert(0, self.MinTemperatuur)
-        self.entryMaxTemperatuur.insert(0, self.MaxTemperatuur)
-        self.entryMinLicht.insert(0, self.MinLicht)
-        self.entryMaxLicht.insert(0, self.MaxLicht)
-
+        self.entryAfstand = MyEntry(pw1, self.Afstand)
+        self.entryMinTemperatuur = MyEntry(pw1, self.MinTemperatuur)
+        self.entryMaxTemperatuur = MyEntry(pw1, self.MaxTemperatuur)
+        self.entryMinLicht = MyEntry(pw1, self.MinLicht)
+        self.entryMaxLicht = MyEntry(pw1, self.MaxLicht)
 
         emptylabel = MyLabel(pw2, "")
         emptylabel2 = MyLabel(placeholder1, "")
@@ -256,39 +250,40 @@ class Main:
             graph.create_text(30,y, text='%d'% (10*i), anchor=E)
 
 
-for device in connect.get_devices():
-    main = Main(device.port)
+# for device in connect.get_devices():
+#     main = Main(device.port)
 
-# main1 = Main("Device 1")
-# main2 = Main("Device 2")
-
-
-# main1.drawLight(70)
-# main1.drawLight(50)
-# main1.drawLight(30)
-# main1.drawLight(40)
-# main1.drawLight(10)
-# main1.drawLight(20)
-# main1.drawLight(80)
-# main1.drawLight(60)
-# main1.drawLight(70)
-# main1.drawLight(50)
-# main1.drawLight(30)
-# main1.drawLight(60)
+main1 = Main("Device 1")
+main2 = Main("Device 2")
 
 
-# main1.drawTemperature(51)
-# main1.drawTemperature(32)
-# main1.drawTemperature(45)
-# main1.drawTemperature(17)
-# main1.drawTemperature(29)
-# main1.drawTemperature(55)
-# main1.drawTemperature(11)
-# main1.drawTemperature(72)
-# main1.drawTemperature(31)
-# main1.drawTemperature(81)
-# main1.drawTemperature(1)
-# main1.drawTemperature(17)
+
+main1.drawLight(70)
+main1.drawLight(50)
+main1.drawLight(30)
+main1.drawLight(40)
+main1.drawLight(10)
+main1.drawLight(20)
+main1.drawLight(80)
+main1.drawLight(60)
+main1.drawLight(70)
+main1.drawLight(50)
+main1.drawLight(30)
+main1.drawLight(60)
+
+
+main1.drawTemperature(51)
+main1.drawTemperature(32)
+main1.drawTemperature(45)
+main1.drawTemperature(17)
+main1.drawTemperature(29)
+main1.drawTemperature(55)
+main1.drawTemperature(11)
+main1.drawTemperature(72)
+main1.drawTemperature(31)
+main1.drawTemperature(81)
+main1.drawTemperature(1)
+main1.drawTemperature(17)
 
 mainFrame.mainloop()
 
