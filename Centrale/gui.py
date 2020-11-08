@@ -1,11 +1,7 @@
 from tkinter import *
 from tkinter import ttk
-<<<<<<< HEAD
 from PIL import Image, ImageTk
 
-=======
-from PIL import ImageTk
->>>>>>> a0e949b4d20d61b1423891ef87c040ebbe42188a
 
 class MainFrame(Tk):
 
