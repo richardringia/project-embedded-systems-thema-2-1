@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from PIL import Image, ImageTk
 
 
 class MainFrame(Tk):
@@ -103,9 +104,14 @@ class Main:
         self.x2 = 40
         self.y2 = self.yValue(0)
         self.s = 1
-        
-        self.createTab(name)
 
+        self.graph1 = Canvas(width=350, height=250, background="white")
+        self.graph2 = Canvas(width=350, height=250, background="white")
+        self.imageCanvas = Canvas(width=350, height=250, background="black")
+
+        self.setImage('zonnescherm80.png')
+
+        self.createTab(name)
 
     def createTab(self, name):
         self.tab = Tab(tabControl, name)
@@ -121,12 +127,9 @@ class Main:
         placeholder2 = WindowPane(pw2, HORIZONTAL)
         placeholder3 = WindowPane(pw2, HORIZONTAL)
 
-        self.graph1 = Graph()
-        self.graph2 = Graph()
+        self.imageCanvas.image = self.filename
+        self.imageCanvas.create_image(0, 0, anchor=NW, image=self.filename)
 
-        self.graph1 = Canvas(width=350, height=250, background="white")
-
-        self.graph2 = Canvas(width=350, height=250, background="white")
 
         afstandLabel = MyLabel(pw1, "AFSTANDAFBEELDING 1")
         instellingenLabel = MyLabel(pw1, "Instelling 1")
@@ -141,7 +144,7 @@ class Main:
         devTab.addLabels(pw1, pw2, height=0)
         btn = MyButton(placeholder1, name)
 
-        pw1.addLabels(afstandLabel, instellingenLabel, height=250)
+        pw1.addLabels(afstandLabel, self.imageCanvas, instellingenLabel, height=0)
         pw1.addLabel(placeholder1, 30, 100)
         placeholder1.addLabel(btn, 50, 100)
         placeholder1.addLabel(emptylabel2, 30, 100)
@@ -165,6 +168,9 @@ class Main:
         
         
         pw2.addLabel(emptylabel, 20, 100)
+
+    def setImage(self, filename):
+        self.filename = ImageTk.PhotoImage(Image.open("afbeeldingen/"+filename))
 
     def yValue(self, value):
         return 220 - value * 2.5
