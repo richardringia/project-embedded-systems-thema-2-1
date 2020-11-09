@@ -1,8 +1,12 @@
 import serial
 import time
+from threading import Thread
 
 class Device:
   running = True
+  counter = 0
+  timer = None
+
   def __init__(self, port):
     self.port = port
     self.serial = serial.Serial(port, 19200, timeout=1)
@@ -14,10 +18,25 @@ class Device:
   def stop(self):
     self.running = False
 
-  def loop(self):
+  def run_counter(self):
     while self.running:
-      print(self.port)
+      if (self.counter == 60):
+        self.counter = 0
+
+      self.counter = self.counter + 1
+      print(self.counter)
       time.sleep(1)
+      
+
+  def loop(self):
+    self.timer = Thread(target=self.run_counter)
+    self.timer.start()
+
+    while self.running:
+      pass
+      #self.serial.write(bytes(str(self.counter).encode()))
+      #serial_data = int.from_bytes(self.serial.read(), byteorder='little')
+      #print(serial_data)
 
  
     

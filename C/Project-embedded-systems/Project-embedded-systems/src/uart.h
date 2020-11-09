@@ -51,6 +51,13 @@ void uart_send(int data) {
 	UDR0 = data;
 }
 
+void uart_send_char(char data) {
+	loop_until_bit_is_set(UCSR0A,UDRE0);
+
+	// Load data into transmit register
+	UDR0 = data;
+}
+
 
 
 

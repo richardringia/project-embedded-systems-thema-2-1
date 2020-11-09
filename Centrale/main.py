@@ -3,9 +3,6 @@ from device import Device
 from gui import *
 from threading import Thread
 
-# device = connect.get_devices()[0]
-# while True:
-    # print(device.get_temp())
 
 mainFrame = MainFrame()
 tabControl = TabControl(mainFrame)
@@ -21,6 +18,7 @@ for device in connect.get_devices():
     thread.start()
     threads.append(thread)
     devices.append(device)
+    threads.append(device.timer)
 
 mainFrame.addDevices(devices)
 
@@ -29,3 +27,4 @@ mainFrame.mainloop()
 for thread in threads:
    thread.join()
 
+print('closed')
