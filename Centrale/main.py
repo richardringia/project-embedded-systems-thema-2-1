@@ -25,12 +25,7 @@ for device in connect.get_devices():
 mainFrame.addDevices(devices)
 
 mainFrame.mainloop()
-print('done1')
-
 
 for thread in threads:
    thread.join()
 
-
-
-print('done')
