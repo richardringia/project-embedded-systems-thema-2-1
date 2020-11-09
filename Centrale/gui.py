@@ -121,8 +121,8 @@ class Main:
         self.MaxLicht = 20
 
         # graph verplaatst vanuit createTab()
-        self.graph1 = Canvas(width=350, height=250, background="white")
-        self.graph2 = Canvas(width=350, height=250, background="white")
+        self.graph1 = Canvas(width=350, height=250, background="gray94")
+        self.graph2 = Canvas(width=350, height=250, background="gray94")
 
         # Image
         self.imageCanvas = Canvas(width=350, height=250, background="gray94")
@@ -203,7 +203,7 @@ class Main:
     def setImage(self, filename):
         self.filename = ImageTk.PhotoImage(Image.open("afbeeldingen/"+filename))
         self.imageCanvas.image = self.filename
-        self.imageCanvas.create_image(25, 5, anchor=NW, image=self.filename)
+        self.imageCanvas.create_image(25, 2, anchor=NW, image=self.filename)
 
     def setSettings(self):
         self.Afstand = self.entryAfstand.get()
