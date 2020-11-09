@@ -70,6 +70,15 @@ void send_data(int read_data)
 		}
 	}
 	
+		
+	if (counter == 8) {
+		update_temp();
+	}
+		
+	if (counter == 3) {
+		update_light();
+	}
+	
 	// 0 0 0 = nothing
 	// 1 2 waarde = temperature
 	// 1 3 waarde = light
@@ -87,6 +96,7 @@ void send_data(int read_data)
 	if (counter == 1) {
 		data_sendend = 0;
 	}
+
 	
 	
 	

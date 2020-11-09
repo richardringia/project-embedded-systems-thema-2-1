@@ -50,8 +50,6 @@ class Device:
         recieve_data_type = serial_data
       elif recieve_data and recieve_data_type != None:
         #recieve_data_value = serial_data
-        print(serial_data)
-        
         if recieve_data_type == 2:
           self.main.drawTemperature(serial_data)
         elif recieve_data_type == 3:
