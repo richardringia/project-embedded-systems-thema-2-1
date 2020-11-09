@@ -60,22 +60,22 @@ void send_data(uint8_t read_data)
 	uint8_t data = 0;
 	
 	
-	switch (read_data)
+	/*switch (read_data)
 	{
-		case 0x30: // temperature
+		case 0x31: // temperature
 			data = get_temp();
 		break;
-		case 0x31: // light
+		case 0x32: // light
 			data = get_light();
 		break;
-		case 0x32: // ultrazone
+		case 0x33: // ultrazone
 			data = get_distance();
 		break;
 		default:
 		break;
-	}
+	}*/
 	
-	uart_send(data);
+	uart_send(read_data);
 }
 
 /************************************************************************/
@@ -132,6 +132,7 @@ int main (void)
 		
 		
 		uint8_t read_data = uart_read();
+		//uart_send_char('A');
 		send_data(read_data);
 		
 		

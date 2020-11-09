@@ -2,14 +2,29 @@ from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
 import connect
+import threading
 
 
 class MainFrame(Tk):
+    devices = []
 
     def __init__(self):
         super().__init__()
         self.title('Central Control Unit')
         self.geometry('750x750')
+    
+    def addDevices(self, devices):
+        self.devices = devices
+
+        self.protocol("WM_DELETE_WINDOW", self.close)
+
+    def close(self):
+        for device in self.devices:
+            device.stop()
+
+        self.destroy()
+
+
 
 
 class WindowPane(PanedWindow):
@@ -97,11 +112,6 @@ class MyEntry(Entry):
         self.insert(0, text)
 
 
-mainFrame = MainFrame()
-tabControl = TabControl(mainFrame)
-tabControl.grid(row=0)
-
-
 class Main:
     def __init__(self, name):
         self.tempx2 = 40
@@ -128,11 +138,11 @@ class Main:
         self.imageCanvas = Canvas(width=350, height=250, background="gray94")
         self.setImage('zonnescherm80.png')
 
-        self.createTab(name)
+        self.name = name
 
 
-    def createTab(self, name):
-        self.tab = Tab(tabControl, name)
+    def createTab(self, tabControl):
+        self.tab = Tab(tabControl, self.name)
         tabControl.addTab(self.tab)
 
         devTab = WindowPane(self.tab, HORIZONTAL)
@@ -169,7 +179,7 @@ class Main:
         emptylabel4 = MyLabel(pw2, "")
 
         devTab.addLabels(pw1, pw2, height=0)
-        btn = MyButton(placeholder1, 'Instellen '+name, self.setSettings)
+        btn = MyButton(placeholder1, 'Instellen '+self.name, self.setSettings)
 
         pw1.addLabels(afstandLabel, self.imageCanvas, instellingenLabel,
                       entryLabelAfstand, self.entryAfstand,
@@ -199,6 +209,8 @@ class Main:
         placeholder3.addLabel(emptylabel4, 30, 0)
 
         pw2.addLabel(emptylabel, 20, 100)
+
+        return tabControl
 
     def setImage(self, filename):
         self.filename = ImageTk.PhotoImage(Image.open("afbeeldingen/"+filename))
@@ -250,40 +262,38 @@ class Main:
             graph.create_text(30,y, text='%d'% (10*i), anchor=E)
 
 
-# for device in connect.get_devices():
-#     main = Main(device.port)
 
-main1 = Main("Device 1")
-main2 = Main("Device 2")
+# main1 = Main("Device 1")
+# main2 = Main("Device 2")
 
 
 
-main1.drawLight(70)
-main1.drawLight(50)
-main1.drawLight(30)
-main1.drawLight(40)
-main1.drawLight(10)
-main1.drawLight(20)
-main1.drawLight(80)
-main1.drawLight(60)
-main1.drawLight(70)
-main1.drawLight(50)
-main1.drawLight(30)
-main1.drawLight(60)
+# main1.drawLight(70)
+# main1.drawLight(50)
+# main1.drawLight(30)
+# main1.drawLight(40)
+# main1.drawLight(10)
+# main1.drawLight(20)
+# main1.drawLight(80)
+# main1.drawLight(60)
+# main1.drawLight(70)
+# main1.drawLight(50)
+# main1.drawLight(30)
+# main1.drawLight(60)
 
 
-main1.drawTemperature(51)
-main1.drawTemperature(32)
-main1.drawTemperature(45)
-main1.drawTemperature(17)
-main1.drawTemperature(29)
-main1.drawTemperature(55)
-main1.drawTemperature(11)
-main1.drawTemperature(72)
-main1.drawTemperature(31)
-main1.drawTemperature(81)
-main1.drawTemperature(1)
-main1.drawTemperature(17)
+# main1.drawTemperature(51)
+# main1.drawTemperature(32)
+# main1.drawTemperature(45)
+# main1.drawTemperature(17)
+# main1.drawTemperature(29)
+# main1.drawTemperature(55)
+# main1.drawTemperature(11)
+# main1.drawTemperature(72)
+# main1.drawTemperature(31)
+# main1.drawTemperature(81)
+# main1.drawTemperature(1)
+# main1.drawTemperature(17)
 
-mainFrame.mainloop()
+
 
