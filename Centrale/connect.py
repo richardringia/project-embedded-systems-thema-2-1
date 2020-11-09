@@ -7,6 +7,7 @@ import time
 from device import *
 
 def get_devices():
+   
     ports = serial.tools.list_ports.comports()
     devices = []
     if sys.platform.startswith('win'):

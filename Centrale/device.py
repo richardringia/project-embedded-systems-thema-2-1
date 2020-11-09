@@ -10,6 +10,10 @@ class Device:
     #   serial_data = int.from_bytes(self.serial.read(), byteorder='little')
     #   print(serial_data)
 
+  def loop(self):
+    while True:
+      print('test' + self.port)
+      pass
 
 
     # def __init__(self, port):
