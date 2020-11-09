@@ -164,6 +164,9 @@ int main (void)
 		
 		if (new_distance != distance) {
 			rolling();
+			uart_send(1);
+			uart_send(4);
+			uart_send(new_distance);
 		} else {
 			PORTB = 0b00000000;
 		}

@@ -47,16 +47,15 @@ void update_temp() {
 	float new_temp = read_temp();
 	temps[counter_temp] = new_temp;
 	
-	calculate_avg_temp();
-	
 	counter_temp = counter_temp + 1;
 	
-	_delay_ms(1000);
 }
 
 
 float get_temp() {
-	return avg_temp;
+	//calculate_avg_temp();
+	//return avg_temp;
+	return read_temp();
 }
 
 

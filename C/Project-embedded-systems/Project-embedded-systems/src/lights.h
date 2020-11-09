@@ -46,16 +46,15 @@ void update_light() {
 	float new_light = read_light();
 	lights[counter_light] = new_light;
 	
-	calculate_avg_light();
-	
 	counter_light = counter_light + 1;
 
-	_delay_ms(1000);
 }
 
 
 float get_light() {
-	return avg_light;
+	//calculate_avg_light();
+	//return avg_light;
+	return read_light();
 }
 
 
