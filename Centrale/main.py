@@ -1,6 +1,7 @@
 import connect
 from device import Device
 from gui import *
+from threading import Thread
 
 # device = connect.get_devices()[0]
 # while True:
@@ -10,8 +11,26 @@ mainFrame = MainFrame()
 tabControl = TabControl(mainFrame)
 tabControl.grid(row=0)
 
+devices = []
+threads = []
+
 for device in connect.get_devices():
     main = Main(device.port)
-    device.loop()
+    tabControl = main.createTab(tabControl)
+    thread = Thread(target=device.loop)
+    thread.start()
+    threads.append(thread)
+    devices.append(device)
+
+mainFrame.addDevices(devices)
 
 mainFrame.mainloop()
+print('done1')
+
+
+for thread in threads:
+   thread.join()
+
+
+
+print('done')

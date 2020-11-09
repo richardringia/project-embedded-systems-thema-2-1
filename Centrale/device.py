@@ -1,7 +1,8 @@
 import serial
+import time
 
 class Device:
-
+  running = True
   def __init__(self, port):
     self.port = port
     self.serial = serial.Serial(port, 19200, timeout=1)
@@ -10,10 +11,16 @@ class Device:
     #   serial_data = int.from_bytes(self.serial.read(), byteorder='little')
     #   print(serial_data)
 
+  def stop(self):
+    self.running = False
+
   def loop(self):
-    while True:
-      print('test' + self.port)
-      pass
+    while self.running:
+      print(self.port)
+      time.sleep(1)
+
+ 
+    
 
 
     # def __init__(self, port):

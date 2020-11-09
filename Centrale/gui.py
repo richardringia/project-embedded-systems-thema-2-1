@@ -2,14 +2,29 @@ from tkinter import *
 from tkinter import ttk
 from PIL import Image, ImageTk
 import connect
+import threading
 
 
 class MainFrame(Tk):
+    devices = []
 
     def __init__(self):
         super().__init__()
         self.title('Central Control Unit')
         self.geometry('750x750')
+    
+    def addDevices(self, devices):
+        self.devices = devices
+
+        self.protocol("WM_DELETE_WINDOW", self.close)
+
+    def close(self):
+        for device in self.devices:
+            device.stop()
+
+        self.destroy()
+
+
 
 
 class WindowPane(PanedWindow):
@@ -123,11 +138,11 @@ class Main:
         self.imageCanvas = Canvas(width=350, height=250, background="gray94")
         self.setImage('zonnescherm80.png')
 
-        self.createTab(name)
+        self.name = name
 
 
-    def createTab(self, name):
-        self.tab = Tab(tabControl, name)
+    def createTab(self, tabControl):
+        self.tab = Tab(tabControl, self.name)
         tabControl.addTab(self.tab)
 
         devTab = WindowPane(self.tab, HORIZONTAL)
@@ -164,7 +179,7 @@ class Main:
         emptylabel4 = MyLabel(pw2, "")
 
         devTab.addLabels(pw1, pw2, height=0)
-        btn = MyButton(placeholder1, 'Instellen '+name, self.setSettings)
+        btn = MyButton(placeholder1, 'Instellen '+self.name, self.setSettings)
 
         pw1.addLabels(afstandLabel, self.imageCanvas, instellingenLabel,
                       entryLabelAfstand, self.entryAfstand,
@@ -194,6 +209,8 @@ class Main:
         placeholder3.addLabel(emptylabel4, 30, 0)
 
         pw2.addLabel(emptylabel, 20, 100)
+
+        return tabControl
 
     def setImage(self, filename):
         self.filename = ImageTk.PhotoImage(Image.open("afbeeldingen/"+filename))
