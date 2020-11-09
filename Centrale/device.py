@@ -20,25 +20,39 @@ class Device:
 
   def run_counter(self):
     while self.running:
-      if (self.counter == 60):
+      if (self.counter == 1):
         self.counter = 0
-
-      self.counter = self.counter + 1
+      else:
+        self.counter = 1
       print(self.counter)
       time.sleep(1)
+    
       
 
   def loop(self):
     self.timer = Thread(target=self.run_counter)
     self.timer.start()
 
-    while self.running:
-      pass
-      #self.serial.write(bytes(str(self.counter).encode()))
-      #serial_data = int.from_bytes(self.serial.read(), byteorder='little')
-      #print(serial_data)
+    recieve_data = False
+    recieve_data_type = None
+    recieve_data_value = None
 
- 
+    while self.running:
+      self.serial.write(bytes(str(self.counter).encode()))
+      serial_data = int.from_bytes(self.serial.read(), byteorder='little')
+      # if serial_data == 1:
+      #   print('data recieved')
+      #   recieve_data = True
+      # elif serial_data != 0 and recieve_data and recieve_data_type == None: # lezen welke data
+      #   print('data type recieved')
+      #   recieve_data_type = serial_data
+      # elif recieve_data and recieve_data_type != None:
+      #   recieve_data_value = serial_data
+      #   print(recieve_data_value)
+      #   recieve_data = False
+      #   recieve_data_type = None
+
+      print(serial_data)
     
 
 
