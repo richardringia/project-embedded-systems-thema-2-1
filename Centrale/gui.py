@@ -143,7 +143,7 @@ class Main:
         self.imageCanvas = Canvas(width=350, height=250, background="gray94")
         self.setImage(self.uitrolLengte)
 
-        self.name = device.name
+        self.name = self.device.port
 
         self.createTab(tabControl)
 
@@ -234,12 +234,12 @@ class Main:
             self.automode = 0
             self.btnUp.config(state='active')
             self.btnDown.config(state='active')
-            self.device.data_to_send(3)
+            self.device.send(3)
         else:
             self.automode = 1
             self.btnUp.config(state='disabled')
             self.btnDown.config(state='disabled')
-            self.device.data_to_send(4)
+            self.device.send(4)
 
     def incrState(self):
         if self.uitrolLengte < 5 and self.automode == 0:
