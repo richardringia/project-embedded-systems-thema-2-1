@@ -37,7 +37,7 @@ void uart_init() {
 }
 
 // Read data of arduino with uart
-uint8_t uart_read(){
+int uart_read(){
 	// Wait until data exists
 	loop_until_bit_is_set(UCSR0A, RXC0); 
 	return UDR0;
@@ -45,13 +45,6 @@ uint8_t uart_read(){
 
 
 void uart_send(int data) {
-	loop_until_bit_is_set(UCSR0A,UDRE0);
-
-	// Load data into transmit register
-	UDR0 = data;
-}
-
-void uart_send_char(char data) {
 	loop_until_bit_is_set(UCSR0A,UDRE0);
 
 	// Load data into transmit register

@@ -47,6 +47,9 @@ uint16_t max_roll_distance = 300;
 uint16_t min_roll_distance = 0;
 bool auto_mode = true;
 int distance = 0;
+int counter = 0;
+int last_read = 0x31;
+int data_sendend = 0;
 
 /************************************************************************/
 /* The send data function is for sending data to the arduino.			*/
@@ -55,10 +58,47 @@ int distance = 0;
 /* 1 (0x31) = light sensor												*/
 /* 2 (0x32) = ultrazone senor                                           */
 /************************************************************************/
-void send_data(uint8_t read_data)
+void send_data(int read_data)
 {
-	uint8_t data = 0;
+	char data = 0;
 	
+	if (read_data == 0x30 || read_data == 0x31) {
+		if (read_data != last_read)	{
+			if (counter == 10) {
+				counter = 1;
+			} else {
+				counter = counter + 1;
+			}
+			last_read = read_data;
+		}
+	}
+	
+	/*if (counter == 10 && data_sendend == 0) {
+		uart_send(1);
+		uart_send(2);
+		uart_send(get_temp());
+		uart_send(1);
+		uart_send(3);
+		uart_send(get_light());
+		data_sendend = 1;
+	}*/
+	
+	/*if (counter == 0) {
+		data_sendend = 0;
+	}*/
+	// 40: 0x25
+	// 30: 0x1E
+	// 60: 0x3C
+	// 0 0 0 = niks
+	// 1 2 waarde = temperatuur
+	// 1 3 waarde = licht
+	// 1 4 waarde = afstand
+	
+	/*if (read_data == 0x36) {
+		uart_send(1);
+	} else {
+		uart_send(0);
+	}*/
 	
 	/*switch (read_data)
 	{
@@ -75,7 +115,7 @@ void send_data(uint8_t read_data)
 		break;
 	}*/
 	
-	uart_send(read_data);
+	uart_send(counter);
 }
 
 /************************************************************************/
@@ -131,8 +171,7 @@ int main (void)
 		_delay_ms(1000);
 		
 		
-		uint8_t read_data = uart_read();
-		//uart_send_char('A');
+		int read_data = uart_read();
 		send_data(read_data);
 		
 		
