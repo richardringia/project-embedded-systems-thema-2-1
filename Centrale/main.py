@@ -7,7 +7,9 @@ devices = []
 threads = []
 
 for device in connect.get_devices():
+
     main = Main(device.port, tabControl)
+    device.set_main(main)
     thread = Thread(target=device.loop)
     thread.start()
     threads.append(thread)
