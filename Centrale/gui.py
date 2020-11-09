@@ -131,7 +131,7 @@ class Main:
         # automode off/on 0/1
         self.automode = 0
 
-        # uitrolLengte
+        # uitrolLengte  (wordt vermenigvuldigd met 20)
         self.uitrolLengte = 0
 
         # graph verplaatst vanuit createTab()
@@ -140,7 +140,7 @@ class Main:
 
         # Image
         self.imageCanvas = Canvas(width=350, height=250, background="gray94")
-        self.setImage(80)
+        self.setImage(self.uitrolLengte)
 
         self.name = name
 
@@ -179,7 +179,7 @@ class Main:
 
         automodeBox = Checkbutton(pw1, text='auto-mode (checked = on)'
                                             '                                                        '
-                                            , variable=self.automode)
+                                            , command=self.setAutomode)
 
         emptylabel = MyLabel(pw2, "")
         emptylabel2 = MyLabel(placeholder1, "")
@@ -190,10 +190,8 @@ class Main:
 
         #Settings button
         btn = MyButton(placeholder1, 'Instellen', self.setSettings)
-        btnUp = MyButton(placeholder1, 'Omhoog', self.decrState(20))
-        btnDown = MyButton(placeholder1, 'Omlaag', self.incrState(20))
-
-
+        btnUp = MyButton(placeholder1, 'Omhoog', self.decrState)
+        btnDown = MyButton(placeholder1, 'Omlaag', self.incrState)
 
         pw1.addLabels(afstandLabel, self.imageCanvas, instellingenLabel, automodeBox,
                       entryLabelAfstand, self.entryAfstand,
@@ -228,11 +226,22 @@ class Main:
 
         return tabControl
 
-    def incrState(self, value):
-        self.uitrolLengte = self.uitrolLengte + value
 
-    def decrState(self, value):
-        self.uitrolLengte = self.uitrolLengte - value
+    def setAutomode(self):
+        if self.automode == 0:
+            self.automode = 1
+        else:
+            self.automode = 0
+
+    def incrState(self):
+        if self.uitrolLengte < 5 and self.automode == 0:
+            self.uitrolLengte = self.uitrolLengte + 1
+            self.setImage(self.uitrolLengte * 20)
+
+    def decrState(self):
+        if self.uitrolLengte > 0 and self.automode == 0:
+            self.uitrolLengte = self.uitrolLengte - 1
+            self.setImage(self.uitrolLengte * 20)
 
     def setImage(self, filename):
         self.filename = ImageTk.PhotoImage(Image.open("afbeeldingen/zonnescherm" + str(filename) + ".png"))
@@ -296,33 +305,33 @@ mainFrame = MainFrame()
 tabControl = TabControl(mainFrame)
 tabControl.grid(row=0)
 
-main1 = Main("Device 1", tabControl)
-main2 = Main("Device 2", tabControl)
-
-main1.drawLight(280)
-main1.drawLight(320)
-main1.drawLight(30)
-main1.drawLight(40)
-main1.drawLight(10)
-main1.drawLight(20)
-main1.drawLight(80)
-main1.drawLight(60)
-main1.drawLight(70)
-main1.drawLight(50)
-main1.drawLight(30)
-main1.drawLight(60)
-
-main1.drawTemperature(-11)
-main1.drawTemperature(32)
-main1.drawTemperature(45)
-main1.drawTemperature(17)
-main1.drawTemperature(29)
-main1.drawTemperature(-5)
-main1.drawTemperature(-11)
-main1.drawTemperature(-25)
-main1.drawTemperature(-30)
-main1.drawTemperature(31)
-main1.drawTemperature(1)
-main1.drawTemperature(17)
+# main1 = Main("Device 1", tabControl)
+# main2 = Main("Device 2", tabControl)
+#
+# main1.drawLight(280)
+# main1.drawLight(320)
+# main1.drawLight(30)
+# main1.drawLight(40)
+# main1.drawLight(10)
+# main1.drawLight(20)
+# main1.drawLight(80)
+# main1.drawLight(60)
+# main1.drawLight(70)
+# main1.drawLight(50)
+# main1.drawLight(30)
+# main1.drawLight(60)
+#
+# main1.drawTemperature(-11)
+# main1.drawTemperature(32)
+# main1.drawTemperature(45)
+# main1.drawTemperature(17)
+# main1.drawTemperature(29)
+# main1.drawTemperature(-5)
+# main1.drawTemperature(-11)
+# main1.drawTemperature(-25)
+# main1.drawTemperature(-30)
+# main1.drawTemperature(31)
+# main1.drawTemperature(1)
+# main1.drawTemperature(17)
 
 #mainFrame.mainloop()
