@@ -52,11 +52,8 @@ int last_read = 0x31;
 int data_sendend = 0;
 
 /************************************************************************/
-/* The send data function is for sending data to the arduino.			*/
-/* read_data is the value for which data it needs to send back			*/
-/* 0 (0x30) = temperature sensor										*/
-/* 1 (0x31) = light sensor												*/
-/* 2 (0x32) = ultrazone senor                                           */
+/*																		*/
+/*																		*/
 /************************************************************************/
 void send_data(int read_data)
 {
@@ -73,7 +70,11 @@ void send_data(int read_data)
 		}
 	}
 	
-	/*if (counter == 10 && data_sendend == 0) {
+	// 0 0 0 = nothing
+	// 1 2 waarde = temperature
+	// 1 3 waarde = light
+	// 1 4 waarde = distance
+	if (counter == 10 && data_sendend == 0) {
 		uart_send(1);
 		uart_send(2);
 		uart_send(get_temp());
@@ -81,41 +82,15 @@ void send_data(int read_data)
 		uart_send(3);
 		uart_send(get_light());
 		data_sendend = 1;
-	}*/
+	}
 	
-	/*if (counter == 0) {
+	if (counter == 1) {
 		data_sendend = 0;
-	}*/
-	// 40: 0x25
-	// 30: 0x1E
-	// 60: 0x3C
-	// 0 0 0 = niks
-	// 1 2 waarde = temperatuur
-	// 1 3 waarde = licht
-	// 1 4 waarde = afstand
+	}
 	
-	/*if (read_data == 0x36) {
-		uart_send(1);
-	} else {
-		uart_send(0);
-	}*/
 	
-	/*switch (read_data)
-	{
-		case 0x31: // temperature
-			data = get_temp();
-		break;
-		case 0x32: // light
-			data = get_light();
-		break;
-		case 0x33: // ultrazone
-			data = get_distance();
-		break;
-		default:
-		break;
-	}*/
 	
-	uart_send(counter);
+	uart_send(data);
 }
 
 /************************************************************************/
