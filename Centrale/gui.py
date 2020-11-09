@@ -97,9 +97,6 @@ class MyEntry(Entry):
         self.insert(0, text)
 
 
-
-
-
 class Main:
     def __init__(self, name):
         self.tempx2 = 40
@@ -281,5 +278,5 @@ class Main:
 # main1.drawTemperature(1)
 # main1.drawTemperature(17)
 
-mainFrame.mainloop()
+
 
