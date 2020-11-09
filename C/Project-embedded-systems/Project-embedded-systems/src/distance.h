@@ -129,7 +129,6 @@ uint16_t calc_cm(uint16_t counter)
 	return 0;
 }
 
-
 int get_distance() 
 {
 	return distance_cm;

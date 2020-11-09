@@ -22,20 +22,22 @@
 float avg_light = 0;
 float lights[index];
 uint16_t counter_light = 0;
-
+float min_light = 0;
+float max_light = 100;
 
 float read_light() {
 	return adc_read(5);
 }
 
 void calculate_avg_light() {
-	int sum, i;
+	float sum;
+	int i;
 	
 	for (i = 0; i < counter_light + 1; i++) {
 		sum = sum + lights[i];
 	}
 	
-	avg_light = (float) sum / i;
+	avg_light = (float)(sum / i);
 }
 
 void update_light() {
@@ -47,14 +49,18 @@ void update_light() {
 	lights[counter_light] = new_light;
 	
 	counter_light = counter_light + 1;
-
 }
 
 
 float get_light() {
-	//calculate_avg_light();
-	//return avg_light;
-	return read_light();
+	calculate_avg_light();
+	return avg_light;
+}
+
+float light_update_value() {
+	float diff = max_light - min_light;
+	float percentage_light = get_light() - min_light;
+	return 100 / diff * percentage_light;
 }
 
 

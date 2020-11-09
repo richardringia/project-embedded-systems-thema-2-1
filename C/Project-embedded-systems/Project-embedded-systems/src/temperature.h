@@ -17,6 +17,8 @@
 
 #define index 10
 
+float min_temp = 10;
+float max_temp = 20;
 float avg_temp = 0;
 float temps[index];
 uint16_t counter_temp = 0;
@@ -26,17 +28,18 @@ uint16_t counter_temp = 0;
 float read_temp() {
 	float value = adc_read(0) * 4.68;
 	value /= 1024.0;
-	return ((value - 0.5) * 100) * 0.5;
+	return ((value - 0.5) * 100);
 }
 
 void calculate_avg_temp() {
-	int sum, i;
+	float sum;
+	int i;
 	
 	for (i = 0; i < counter_temp + 1; i++) {
 		sum = sum + temps[i];
 	}
 	
-	avg_temp = (float) sum / i;
+	avg_temp = (float)(sum / i);
 }
 
 void update_temp() {
@@ -53,11 +56,16 @@ void update_temp() {
 
 
 float get_temp() {
-	//calculate_avg_temp();
-	//return avg_temp;
-	return read_temp();
+	calculate_avg_temp();
+	return avg_temp;
 }
 
+float temp_update_value() {
+	float diff = max_temp - min_temp;
+	float percentage_temp = get_temp() - min_temp;
+	return 100 / diff * percentage_temp;
+}
+ 
 
 
 

@@ -35,9 +35,9 @@
 #include <util/delay.h>
 #include <uart.h>
 #include <adc.h>
+#include <distance.h>
 #include <lights.h>
 #include <temperature.h>
-#include <distance.h>
 #include <leds.h>
 #include <stdbool.h>
 
@@ -45,31 +45,24 @@
 
 uint16_t max_roll_distance = 300;
 uint16_t min_roll_distance = 0;
-bool auto_mode = true;
+int auto_mode = 0;
 int distance = 0;
 int counter = 0;
 int last_read = 0x31;
 int data_sendend = 0;
+int auto_distance = 0;
 
 /************************************************************************/
-/*																		*/
-/*																		*/
+/*	SEND DATA PROTOCOL:													*/
+/*	0 0 0 = nothing														*/
+/*	1 2 {value} = send temperature										*/
+/*	1 3 {value} = send light											*/
+/*	1 4 {value} = send distance											*/
+/*	1 9 {value} = test													*/
 /************************************************************************/
 void send_data(int read_data)
 {
 	char data = 0;
-	
-	if (read_data == 0x30 || read_data == 0x31) {
-		if (read_data != last_read)	{
-			if (counter == 10) {
-				counter = 1;
-			} else {
-				counter = counter + 1;
-			}
-			last_read = read_data;
-		}
-	}
-	
 		
 	if (counter == 8) {
 		update_temp();
@@ -79,10 +72,6 @@ void send_data(int read_data)
 		update_light();
 	}
 	
-	// 0 0 0 = nothing
-	// 1 2 waarde = temperature
-	// 1 3 waarde = light
-	// 1 4 waarde = distance
 	if (counter == 10 && data_sendend == 0) {
 		uart_send(1);
 		uart_send(2);
@@ -91,6 +80,11 @@ void send_data(int read_data)
 		uart_send(3);
 		uart_send(get_light());
 		data_sendend = 1;
+		
+		auto_distance = (temp_update_value() + light_update_value()) / 2;
+		uart_send(1);
+		uart_send(9);
+		uart_send(auto_distance);
 	}
 	
 	if (counter == 1) {
@@ -101,6 +95,33 @@ void send_data(int read_data)
 	
 	
 	uart_send(data);
+}
+
+/************************************************************************/
+/*	READ DATA PROTOCOL:													*/
+/*	0/1 = counter														*/
+/*	2/3 = change auto modus												*/
+/************************************************************************/
+int read_data() {
+	int read_data = uart_read();
+	if (read_data == 0x30 || read_data == 0x31) {
+		if (read_data != last_read)	{
+			if (counter == 10) {
+				counter = 1;
+				} else {
+				counter = counter + 1;
+			}
+			last_read = read_data;
+		}
+	}
+	
+	if (read_data == 0x32) {
+		auto_mode = 0;
+	} else if (read_data == 0x33) {
+		auto_mode = 1;
+	}
+	
+	return read_data;
 }
 
 /************************************************************************/
@@ -124,11 +145,11 @@ void roll_sunscreen(int mode)
 {
 	switch (mode){
 		case 0:
-			//rolling();
+			rolling();
 			rolled_out();
 			break;
 		case 1:
-			//rolling();
+			rolling();
 			rolled_in();
 			break;
 		default:
@@ -152,26 +173,29 @@ int main (void)
 	
 	
 	while (1) {
-		send_signal_distance();
-		_delay_ms(1000);
+		
+		if (auto_mode) {
+			
+		} else {
+			send_signal_distance();
+			_delay_ms(1000);
+		}
 		
 		
-		int read_data = uart_read();
-		send_data(read_data);
+		
+		send_data(read_data());
 		
 		
-		int new_distance = get_distance();
+		int new_distance = auto_mode ? auto_distance : get_distance();
 		
 		if (new_distance != distance) {
-			rolling();
+			roll_sunscreen(new_distance < distance);
 			uart_send(1);
 			uart_send(4);
 			uart_send(new_distance);
 		} else {
-			PORTB = 0b00000000;
+			reset();
 		}
 		distance = new_distance;	
 	}
-	
-
 }

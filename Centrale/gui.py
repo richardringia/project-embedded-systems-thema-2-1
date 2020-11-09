@@ -111,7 +111,8 @@ class MyEntry(Entry):
 
 
 class Main:
-    def __init__(self, name, tabControl):
+    def __init__(self, device, tabControl):
+        self.device = device
         self.tempx2 = 40
         self.lightx2 = 40
 
@@ -131,7 +132,7 @@ class Main:
         # automode off/on 0/1
         self.automode = 0
 
-        # uitrolLengte  (wordt vermenigvuldigd met 20)
+        # uitrolLengte  (0/1/2/3/4/5)  wordt vermenigvuldigd met 20)
         self.uitrolLengte = 0
 
         # graph verplaatst vanuit createTab()
@@ -142,7 +143,7 @@ class Main:
         self.imageCanvas = Canvas(width=350, height=250, background="gray94")
         self.setImage(self.uitrolLengte)
 
-        self.name = name
+        self.name = device.name
 
         self.createTab(tabControl)
 
@@ -190,8 +191,9 @@ class Main:
 
         #Settings button
         btn = MyButton(placeholder1, 'Instellen', self.setSettings)
-        btnUp = MyButton(placeholder1, 'Omhoog', self.decrState)
-        btnDown = MyButton(placeholder1, 'Omlaag', self.incrState)
+        self.btnUp = MyButton(placeholder1, 'Omhoog', self.decrState)
+        self.btnDown = MyButton(placeholder1, 'Omlaag', self.incrState)
+
 
         pw1.addLabels(afstandLabel, self.imageCanvas, instellingenLabel, automodeBox,
                       entryLabelAfstand, self.entryAfstand,
@@ -203,8 +205,8 @@ class Main:
         pw1.addLabel(placeholder1, 30, 100)
         placeholder1.addLabel(btn, 50, 100)
         placeholder1.addLabel(emptylabel2, 30, 50)
-        placeholder1.addLabel(btnUp, 50, 110)
-        placeholder1.addLabel(btnDown, 50, 50)
+        placeholder1.addLabel(self.btnUp, 50, 110)
+        placeholder1.addLabel(self.btnDown, 50, 50)
 
         pw2.addLabels(temperatuurLabel, height=0)
         pw2.addLabel(placeholder2, 0, 10)
@@ -228,10 +230,16 @@ class Main:
 
 
     def setAutomode(self):
-        if self.automode == 0:
-            self.automode = 1
-        else:
+        if self.automode == 1:
             self.automode = 0
+            self.btnUp.config(state='active')
+            self.btnDown.config(state='active')
+            self.device.data_to_send(3)
+        else:
+            self.automode = 1
+            self.btnUp.config(state='disabled')
+            self.btnDown.config(state='disabled')
+            self.device.data_to_send(4)
 
     def incrState(self):
         if self.uitrolLengte < 5 and self.automode == 0:
