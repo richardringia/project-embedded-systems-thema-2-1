@@ -3,17 +3,11 @@ from device import Device
 from gui import *
 from threading import Thread
 
-
-mainFrame = MainFrame()
-tabControl = TabControl(mainFrame)
-tabControl.grid(row=0)
-
 devices = []
 threads = []
 
 for device in connect.get_devices():
-    main = Main(device.port)
-    tabControl = main.createTab(tabControl)
+    main = Main(device.port, tabControl)
     thread = Thread(target=device.loop)
     thread.start()
     threads.append(thread)
@@ -25,6 +19,6 @@ mainFrame.addDevices(devices)
 mainFrame.mainloop()
 
 for thread in threads:
-   thread.join()
+    thread.join()
 
 print('closed')
