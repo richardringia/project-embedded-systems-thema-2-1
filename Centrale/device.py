@@ -6,8 +6,10 @@ class Device:
   running = True
   counter = 0
   timer = None
+  updater = None
   main = None
   data_to_send = None
+  update_settings = 0
 
   def __init__(self, port):
     self.port = port
@@ -31,12 +33,28 @@ class Device:
         self.counter = 1
       time.sleep(1)    
 
+  def run_update_settings(self):
+    while self.running:
+      if (self.update_settings == 1):
+        self.send("5" + self.main.MinTemperatuur + "#")
+        time.sleep(1)
+        self.send("6" + self.main.MaxTemperatuur + "#")
+        time.sleep(1)
+        self.send("7" + self.main.MinLicht + "#")
+        time.sleep(1)
+        self.send("8" + self.main.MaxLicht + "#")
+        time.sleep(1)   
+        self.update_settings = 0
+
   def send(self, data):
     self.data_to_send = data
 
   def loop(self):
     self.timer = Thread(target=self.run_counter)
     self.timer.start()
+
+    self.updater = Thread(target=self.run_update_settings)
+    self.updater.start()
 
     recieve_data = False
     recieve_data_type = None

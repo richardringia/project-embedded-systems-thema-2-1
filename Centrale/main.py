@@ -15,6 +15,7 @@ for device in connect.get_devices():
     threads.append(thread)
     devices.append(device)
     threads.append(device.timer)
+    threads.append(device.updater)
 
 mainFrame.addDevices(devices)
 

@@ -102,7 +102,6 @@ void send_data(int read_data)
 /*	READ DATA PROTOCOL:													*/
 /*	0/1 = counter														*/
 /*	2/3 = change auto modus												*/
-/*	4 = max_distance
 /*	5 = min_temp
 /*	6 = max_temp
 /*	7 = min_light
@@ -112,6 +111,9 @@ int read_data() {
 	int read_data = uart_read();
 	
 	if (read_data == 0x23) {	
+		uart_send(1);
+		uart_send(9);
+		uart_send(read_value);
 		switch (read_type)
 		{
 			case 0x35:
@@ -132,6 +134,7 @@ int read_data() {
 		
 		is_reading = 0;
 		read_value = 0;
+		read_type = 0;
 	} 
 	else if (read_type == 0) {	
 		if (read_data == 0x30 || read_data == 0x31) {

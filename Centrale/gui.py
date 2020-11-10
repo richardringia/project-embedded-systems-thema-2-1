@@ -234,12 +234,12 @@ class Main:
             self.automode = 0
             self.btnUp.config(state='active')
             self.btnDown.config(state='active')
-            self.device.send(3)
+            self.device.send(2)
         else:
             self.automode = 1
             self.btnUp.config(state='disabled')
             self.btnDown.config(state='disabled')
-            self.device.send(4)
+            self.device.send(3)
 
     def incrState(self):
         if self.uitrolLengte < 5 and self.automode == 0:
@@ -252,6 +252,19 @@ class Main:
             self.setImage(self.uitrolLengte * 20)
 
     def setImage(self, filename):
+        if int(filename) > int(self.Afstand):
+            if  int(self.Afstand) <= 10:
+                filename = "0"
+            elif  int(self.Afstand) > 10 and  int(self.Afstand) <= 30:
+                filename = "20"
+            elif  int(self.Afstand) > 30 and  int(self.Afstand) <= 50:
+                filename = "40"
+            elif  int(self.Afstand) > 50 and  int(self.Afstand) <= 70:
+                filename = "60"
+            elif  int(self.Afstand) > 70 and  int(self.Afstand) <= 90:
+                filename = "80"
+            elif  int(self.Afstand) > 90:
+                filename = "100"
         self.filename = ImageTk.PhotoImage(Image.open("afbeeldingen/zonnescherm" + str(filename) + ".png"))
         self.imageCanvas.image = self.filename
         self.imageCanvas.create_image(25, 2, anchor=NW, image=self.filename)
@@ -262,6 +275,7 @@ class Main:
         self.MaxTemperatuur = self.entryMaxTemperatuur.get()
         self.MinLicht = self.entryMinLicht.get()
         self.MaxLicht = self.entryMaxLicht.get()
+        self.device.update_settings = 1
 
     def yValueTemp(self, value):
         if value >= 0:
