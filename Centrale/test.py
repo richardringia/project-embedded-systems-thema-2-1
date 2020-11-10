@@ -7,6 +7,9 @@ print(ser)
 
 while True:
 
-    ser.write(bytes("5#".encode()))
+    ser.write(bytes("49#".encode()))
     read_val = ser.read()
+
     print(read_val)
+
+    print(list(read_val))

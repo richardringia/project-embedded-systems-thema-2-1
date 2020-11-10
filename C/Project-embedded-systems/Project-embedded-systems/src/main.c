@@ -40,11 +40,9 @@
 #include <temperature.h>
 #include <leds.h>
 #include <stdbool.h>
+#include <converter.h>
 
 
-
-uint16_t max_roll_distance = 300;
-uint16_t min_roll_distance = 0;
 int auto_mode = 0;
 int distance = 0;
 int counter = 0;
@@ -53,7 +51,7 @@ int data_sendend = 0;
 int auto_distance = 0;
 int is_reading = 0;
 int read_type = 0;
-int read_value = "";
+int read_value = 0;
 
 /************************************************************************/
 /*	SEND DATA PROTOCOL:													*/
@@ -67,7 +65,7 @@ void send_data(int read_data)
 {
 	char data = 0;
 		
-	/*if (counter == 8) {
+	if (counter == 8) {
 		update_temp();
 	}
 		
@@ -92,12 +90,12 @@ void send_data(int read_data)
 	
 	if (counter == 1) {
 		data_sendend = 0;
-	}*/
+	}
 
 	
 	
 	
-	uart_send(read_value);
+	uart_send(data);
 }
 
 /************************************************************************/
@@ -113,16 +111,27 @@ void send_data(int read_data)
 int read_data() {
 	int read_data = uart_read();
 	
-	if (read_data == 0x23) {
-		is_reading = 0;
-		if (read_value == 0x31) {
-		//	PORTB = 0b00000001;
-		}else {
-		//	PORTB = 0b00000010;
+	if (read_data == 0x23) {	
+		switch (read_type)
+		{
+			case 0x35:
+				min_temp = read_value;
+			break;
+			case 0x36:
+				max_temp = read_value;
+			break;
+			case 0x37:
+				min_light = read_value;
+			break;
+			case 0x38:
+				max_light = read_value;
+			break;
+			default:
+			break;
 		}
-		//PORTB = 0x00000111;
-		//read_value = 0;
-		// setten van value in juiste variable
+		
+		is_reading = 0;
+		read_value = 0;
 	} 
 	else if (read_type == 0) {	
 		if (read_data == 0x30 || read_data == 0x31) {
@@ -148,7 +157,7 @@ int read_data() {
 		}
 	} else if (is_reading) {
 		PORTB = 0b00000100;
-		read_value = read_value + (int) read_data;
+		read_value = read_value * 10 + convert_to_int(read_data);
 	}
 	
 	return read_data;
@@ -216,7 +225,7 @@ int main (void)
 		send_data(read_data());
 		
 		
-		/*int new_distance = auto_mode ? auto_distance : get_distance();
+		int new_distance = auto_mode ? auto_distance : get_distance();
 		
 		if (new_distance != distance) {
 			roll_sunscreen(new_distance < distance);
@@ -226,6 +235,6 @@ int main (void)
 		} else {
 			reset();
 		}
-		distance = new_distance;	*/
+		distance = new_distance;
 	}
 }

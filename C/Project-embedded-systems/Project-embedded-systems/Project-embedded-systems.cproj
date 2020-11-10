@@ -248,6 +248,9 @@
     <Compile Include="src\adc.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\converter.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\distance.h">
       <SubType>compile</SubType>
     </Compile>
